@@ -255,3 +255,10 @@ npm run test:evals
     *   The email contains the PDF.
     *   No PII details are exposed in the PDF or the email body.
 4.  **Footer check**: Scroll to the footer, click the Terms & Conditions and Privacy Policy links, and verify that they render correctly on mobile and desktop viewports.
+
+---
+
+## 5. Defensive Architecture & Edge Case Matrix
+
+For a complete reference of all system failure modes, Web Audio browser constraints, RAG chunking rules, PII sanitization regexes, MCP timeouts, and n8n fallback mechanisms, consult [edge-case.md](file:///Users/aarushigrover/Desktop/Capstone%20project-%20Property%20Scout/edge-case.md).
+

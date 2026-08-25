@@ -238,3 +238,10 @@ The system embeds automated run-time and test-time evaluation pipelines to ensur
 *   **Integration**:
     *   MCP Client: `@modelcontextprotocol/sdk` (Node.js).
     *   Automation: n8n (self-hosted or cloud instance).
+
+---
+
+## 6. Defensive Architecture & Corner Scenario Matrix
+
+Comprehensive mapping of failure modes, Web Audio API constraints, circuit breaker limits, RAG chunking rules, PII sanitization regexes, MCP transit fallbacks, and n8n notification fallbacks is documented in [edge-case.md](file:///Users/aarushigrover/Desktop/Capstone%20project-%20Property%20Scout/edge-case.md).
+
