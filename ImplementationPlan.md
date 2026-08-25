@@ -243,10 +243,11 @@ describe("Edit Correctness Eval", () => {
 ## 4. Verification & Testing Playbook
 
 ### Automated Tests
-Run the evaluation test suite:
+Run the continuous 18-turn evaluation test suite:
 ```bash
-npm run test:evals
+npx tsx backend/src/testContinuous18Turns.ts
 ```
+For full benchmark scores, Golden Dataset breakdown, and adversarial test results, see [evals_report.md](file:///Users/aarushigrover/Desktop/Capstone%20project-%20Property%20Scout/evals_report.md).
 
 ### Manual QA Checklist
 1.  **Toggle Verification**: Switch between the *Buy* and *Sell* tabs. Ensure UI state is isolated.
