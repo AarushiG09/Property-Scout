@@ -8,7 +8,7 @@ import { initDatabase, getAllAvailableListings, getListingCount, insertSingleLis
 import { initRagDatabase, getRagChunkCount } from "./ragStore";
 import { loadSourceCatalog } from "./sourcesCatalog";
 import { processUserQuery, refineShortlist, UserPreferences } from "./agent";
-import { sendSiteVisitConfirmationEmail, sendOwnerListingConfirmationEmail } from "./emailService";
+import { sendSiteVisitConfirmationEmail, sendOwnerListingConfirmationEmail, generateGoogleCalendarUrl } from "./emailService";
 import { triggerN8nShortlistWorkflow } from "./n8nWorkflow";
 import { book_visit, find_available_broker, find_open_time_slots } from "./brokerService";
 import { EdgeTTS } from "node-edge-tts";
@@ -27,20 +27,17 @@ initDatabase();
 initRagDatabase();
 loadSourceCatalog().catch(console.error);
 
-// Auto-ingest RAG knowledge base on startup if empty (handles Railway cold start)
+// Log RAG database status on startup — no auto-ingest needed since rag_vectors.db is pre-built and shipped in git
 (async () => {
   try {
     const ragCount = getRagChunkCount();
-    if (ragCount === 0) {
-      console.log("[RAG AUTO-INGEST] RAG database empty — running docs ingestion now...");
-      const { runDocsIngestion } = await import("../../scraper/docs_ingestion");
-      await runDocsIngestion();
-      console.log(`[RAG AUTO-INGEST] Complete. ${getRagChunkCount()} chunks indexed.`);
+    if (ragCount > 0) {
+      console.log(`[RAG] Pre-built knowledge base loaded: ${ragCount} chunks indexed and ready.`);
     } else {
-      console.log(`[RAG] ${ragCount} chunks already indexed. Skipping ingestion.`);
+      console.warn("[RAG] WARNING: RAG database is empty. Run 'npx ts-node scraper/docs_ingestion.ts' locally to rebuild.");
     }
   } catch (err: any) {
-    console.error("[RAG AUTO-INGEST] Failed:", err.message);
+    console.error("[RAG] Startup check failed:", err.message);
   }
 })();
 
@@ -108,11 +105,10 @@ app.post("/api/listings", async (req: Request, res: Response) => {
 
     console.log(`[SELLER PROPERTY CREATED] "${newListing.title}" in ${newListing.area} for ₹${newListing.rent}/mo`);
 
-    // Dispatch Confirmation Email to Owner's Email Address
-    let ownerEmailResult = null;
+    // Dispatch Confirmation Email to Owner's Email Address (Non-blocking)
     if (body.contactEmail) {
-      console.log(`[OWNER EMAIL NOTIFICATION] Dispatching confirmation email to owner: ${body.contactEmail}`);
-      ownerEmailResult = await sendOwnerListingConfirmationEmail({
+      console.log(`[OWNER EMAIL NOTIFICATION] Dispatching confirmation email to owner in background: ${body.contactEmail}`);
+      sendOwnerListingConfirmationEmail({
         listingId: newListing.external_id,
         title: newListing.title,
         area: newListing.area,
@@ -125,10 +121,10 @@ app.post("/api/listings", async (req: Request, res: Response) => {
         contactEmail: body.contactEmail,
         contactPhone: body.contactPhone || "[REDACTED]",
         photoCount: Array.isArray(body.photos) ? body.photos.length : 2
-      });
+      }).catch(err => console.error("Background email failed:", err));
     }
 
-    res.json({ success: true, listing: newListing, emailResult: ownerEmailResult });
+    res.json({ success: true, listing: newListing, emailDispatched: true });
   } catch (err: any) {
     console.error("Error creating seller listing:", err);
     res.status(500).json({ success: false, error: err.message });
@@ -350,8 +346,8 @@ app.post("/api/book-visit", async (req: Request, res: Response) => {
       return res.status(200).json(bookingResult);
     }
 
-    // Dispatch site visit confirmation email with assigned broker info
-    const emailRes = await sendSiteVisitConfirmationEmail({
+    // Dispatch site visit confirmation email with assigned broker info (Non-blocking)
+    const bookingInfo = {
       bookingId: bookingResult.bookingId!,
       propertyTitle: propertyTitle || "Selected Rental Property",
       area: area || "Bengaluru",
@@ -362,7 +358,11 @@ app.post("/api/book-visit", async (req: Request, res: Response) => {
       buyerEmail,
       buyerPhone,
       broker: bookingResult.broker!
-    });
+    };
+    
+    sendSiteVisitConfirmationEmail(bookingInfo).catch(err => console.error("Background email failed:", err));
+
+    const googleCalendarUrl = generateGoogleCalendarUrl(bookingInfo);
 
     res.json({
       success: true,
@@ -370,9 +370,8 @@ app.post("/api/book-visit", async (req: Request, res: Response) => {
       bookingId: bookingResult.bookingId,
       broker: bookingResult.broker,
       buyerDetails: { buyerName, buyerEmail, buyerPhone },
-      emailSent: emailRes.success,
-      emailPreviewUrl: emailRes.previewUrl,
-      googleCalendarUrl: emailRes.googleCalendarUrl,
+      emailSent: true,
+      googleCalendarUrl: googleCalendarUrl,
       message: `Site visit for "${propertyTitle || 'Property'}" confirmed with agent ${bookingResult.broker!.name} on ${date} at ${timeSlot}.`
     });
   } catch (err: any) {
