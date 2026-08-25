@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Mic, MicOff, Search, Send, Sparkles, MapPin, Calendar, CheckCircle2, Navigation, BookOpen, ExternalLink, Filter, Layers, X, Clock, Volume2, VolumeX, AlertTriangle, User, Mail, Phone } from "lucide-react";
+import { Mic, MicOff, Search, Send, Sparkles, MapPin, Calendar, CheckCircle2, Navigation, BookOpen, ExternalLink, Filter, Layers, X, Clock, Volume2, VolumeX, AlertTriangle, User, Mail, Phone, FileText } from "lucide-react";
 import { useAudio } from "../hooks/useAudio";
 import type { Listing, SourceCatalogItem, RagSearchResult, UserPreferences, AgentQueryResult } from "../types";
 
@@ -232,18 +232,19 @@ export const BuyTab: React.FC = () => {
 
   const handleOpenSnapshot = async (item: Listing) => {
     setSelectedListing(item);
+    setRagContext([]); // clear previous
     try {
-      const res = await fetchWithFallback("/query", {
+      const res = await fetchWithFallback("/snapshot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ transcript: `Tell me about ${item.area}` })
+        body: JSON.stringify({ area: item.area, listing: item })
       });
       const data = await res.json();
-      if (data.retrieved_rag_context && data.retrieved_rag_context.length > 0) {
-        setRagContext(data.retrieved_rag_context);
+      if (data.locality_context && data.locality_context.length > 0) {
+        setRagContext(data.locality_context);
       }
     } catch (e) {
-      console.warn("Failed to load RAG snapshot guide:", e);
+      console.warn("Failed to load snapshot guide:", e);
     }
   };
 
@@ -829,62 +830,92 @@ export const BuyTab: React.FC = () => {
       {/* 4. Neighborhood Snapshot & RAG Details Drawer */}
       {selectedListing && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex justify-end p-0 md:p-4">
-          <div className="bg-[#131B2E] border-l md:border border-white/10 w-full max-w-xl h-full md:h-[90vh] md:rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-200">
+          <div className="bg-[#131B2E] border-l md:border border-white/10 w-full max-w-xl h-full md:h-[95vh] md:rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-200">
             
             {/* Drawer Header */}
-            <div className="p-5 border-b border-white/10 bg-slate-900/80 flex items-center justify-between">
-              <div>
-                <h3 className="text-base font-bold text-white">{selectedListing.title}</h3>
-                <p className="text-xs text-teal-400">{selectedListing.area} ({selectedListing.society_name})</p>
+            <div className="p-5 border-b border-white/10 bg-slate-900/80 flex items-center justify-between shrink-0">
+              <div className="flex-1 min-w-0 pr-4">
+                <h3 className="text-base font-bold text-white truncate">{selectedListing.title}</h3>
+                <p className="text-xs text-teal-400">{selectedListing.area} · {selectedListing.society_name}</p>
               </div>
-              <button onClick={() => setSelectedListing(null)} className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5">
+              <button onClick={() => { setSelectedListing(null); setRagContext([]); }} className="text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-white/5 shrink-0">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Drawer Content */}
-            <div className="p-6 overflow-y-auto space-y-6 text-sm text-gray-300">
-              {/* Rent Details */}
+            <div className="p-5 overflow-y-auto space-y-5 text-sm text-gray-300 flex-1">
+
+              {/* ── 1. Rent & Core Config ── */}
               <div className="bg-slate-900/90 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400">Rent & Configuration</p>
-                  <p className="text-xl font-extrabold text-white mt-0.5">₹{selectedListing.rent.toLocaleString('en-IN')} / mo</p>
+                  <p className="text-[11px] text-gray-400 mb-0.5">Monthly Rent</p>
+                  <p className="text-2xl font-extrabold text-white">₹{selectedListing.rent.toLocaleString('en-IN')}</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">per month</p>
                 </div>
-                <span className="bg-teal-500/10 text-teal-400 border border-teal-500/20 text-xs font-semibold px-3 py-1 rounded-full">
-                  {selectedListing.bedrooms} BHK • {selectedListing.furnishing}
-                </span>
+                <div className="text-right space-y-1.5">
+                  <span className="block bg-teal-500/10 text-teal-400 border border-teal-500/20 text-xs font-semibold px-3 py-1 rounded-full">
+                    {selectedListing.bedrooms} BHK
+                  </span>
+                  <span className="block bg-slate-800 text-gray-300 border border-white/10 text-xs font-medium px-3 py-1 rounded-full">
+                    {selectedListing.furnishing}
+                  </span>
+                  <span className="block bg-slate-800 text-gray-400 border border-white/10 text-xs font-mono px-3 py-1 rounded-full">
+                    {selectedListing.sqft} sqft
+                  </span>
+                </div>
               </div>
 
-              {/* Description */}
+              {/* ── 2. Full Amenities ── */}
+              {selectedListing.amenities && selectedListing.amenities.length > 0 && (
+                <div>
+                  <h4 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-400" /> All Amenities & Features
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedListing.amenities.map((a: string, idx: number) => (
+                      <span key={idx} className="bg-slate-900 border border-white/10 text-gray-200 text-xs px-3 py-1.5 rounded-xl font-medium">
+                        {a}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ── 3. Description ── */}
               <div>
-                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Description & Notes</h4>
+                <h4 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-teal-400" /> Description & Notes
+                </h4>
                 <p className="text-xs text-gray-200 bg-slate-900/60 p-3.5 rounded-2xl border border-white/5 leading-relaxed">
                   {selectedListing.description}
                 </p>
               </div>
 
-              {/* OpenStreetMap Transit & POI Snapshot */}
+              {/* ── 4. OSM Transit Snapshot (if available) ── */}
               {selectedListing.snapshot && (
-                <div className="space-y-3">
-                  <h4 className="text-xs font-semibold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <Navigation className="w-4 h-4" /> OpenStreetMap Transit & POI Snapshot
+                <div>
+                  <h4 className="text-[11px] font-semibold text-teal-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <Navigation className="w-3.5 h-3.5" /> Transit & Commute Summary
                   </h4>
-                  
-                  <div className="bg-slate-900/80 border border-white/10 rounded-2xl p-4 space-y-3 text-xs">
-                    <p className="font-semibold text-white">{selectedListing.snapshot.commute_summary}</p>
+                  <div className="bg-slate-900/80 border border-teal-800/30 rounded-2xl p-4 space-y-3 text-xs">
+                    <p className="text-white font-medium leading-relaxed">{selectedListing.snapshot.commute_summary}</p>
                     
                     {selectedListing.snapshot.nearest_metro && (
-                      <div className="flex items-center justify-between bg-teal-950/40 border border-teal-800/40 p-3 rounded-xl text-teal-300">
-                        <span>Nearest Metro: <strong>{selectedListing.snapshot.nearest_metro.name}</strong></span>
-                        <span className="font-mono font-bold">{selectedListing.snapshot.nearest_metro.distance_km} km</span>
+                      <div className="flex items-center justify-between bg-teal-950/50 border border-teal-700/30 p-3 rounded-xl text-teal-300">
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 shrink-0" />
+                          Nearest Metro: <strong className="ml-1">{selectedListing.snapshot.nearest_metro.name}</strong>
+                        </span>
+                        <span className="font-mono font-bold text-teal-200">{selectedListing.snapshot.nearest_metro.distance_km} km</span>
                       </div>
                     )}
 
                     {Array.isArray(selectedListing.snapshot.transit_points) && selectedListing.snapshot.transit_points.length > 0 && (
                       <div className="space-y-1.5">
-                        <p className="text-gray-400 font-medium">Nearby Transit Points:</p>
+                        <p className="text-gray-400 font-semibold">Nearby Transit Points:</p>
                         {selectedListing.snapshot.transit_points.map((poi: any, idx: number) => (
-                          <div key={idx} className="flex justify-between text-gray-300 bg-slate-950/50 p-2.5 rounded-xl">
+                          <div key={idx} className="flex justify-between text-gray-300 bg-slate-950/60 p-2.5 rounded-xl">
                             <span>{poi.name}</span>
                             <span className="font-mono text-teal-400">{poi.distance_km} km</span>
                           </div>
@@ -895,24 +926,75 @@ export const BuyTab: React.FC = () => {
                 </div>
               )}
 
-              {/* Grounded RAG Locality Guide */}
-              {ragContext.length > 0 && (
+              {/* ── 5. RAG Locality & Safety Guide ── */}
+              {ragContext.length === 0 ? (
+                <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-5 flex items-center gap-3 text-xs text-gray-400">
+                  <div className="w-4 h-4 border-2 border-teal-400 border-t-transparent rounded-full animate-spin shrink-0" />
+                  Loading neighborhood research from RAG knowledge base…
+                </div>
+              ) : (
                 <div className="space-y-3">
-                  <h4 className="text-xs font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <BookOpen className="w-4 h-4" /> RAG Locality Guide & Background
+                  <h4 className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5" /> Neighborhood Research & Locality Guide
                   </h4>
-                  {ragContext.map((c, idx) => (
-                    <div key={idx} className="bg-slate-900/80 border border-white/10 rounded-2xl p-4 space-y-2 text-xs">
-                      <p className="font-semibold text-white">{c.locality || "Locality Profile"}</p>
-                      <p className="text-gray-300 leading-relaxed">{c.content}</p>
+                  {ragContext.map((c: any, idx: number) => (
+                    <div key={idx} className="bg-slate-900/80 border border-white/10 rounded-2xl p-4 space-y-2.5 text-xs">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="font-bold text-white">{c.locality || selectedListing.area}</p>
+                          {c.region && <p className="text-[10px] text-gray-500 mt-0.5">{c.region} · Bengaluru</p>}
+                        </div>
+                        {c.document_type && (
+                          <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2 py-0.5 rounded-full shrink-0 capitalize">
+                            {c.document_type.replace(/_/g, " ")}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-gray-200 leading-relaxed">{c.content}</p>
+
+                      {/* Topics covered */}
+                      {Array.isArray(c.supported_topics) && c.supported_topics.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {c.supported_topics.map((t: string, i: number) => (
+                            <span key={i} className="bg-slate-800 text-gray-400 border border-white/5 text-[10px] px-2 py-0.5 rounded-lg capitalize">
+                              {t.replace(/_/g, " ")}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Sources cited */}
+                      {Array.isArray(c.sources) && c.sources.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-1 border-t border-white/5">
+                          {c.sources.map((s: string, i: number) => (
+                            <span key={i} className="bg-teal-950/50 text-teal-400 border border-teal-800/30 text-[10px] font-mono px-2 py-0.5 rounded-lg">
+                              {s}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Do-not-infer warnings */}
+                      {Array.isArray(c.do_not_infer) && c.do_not_infer.length > 0 && (
+                        <p className="text-[10px] text-amber-400/70 italic pt-0.5">
+                          ⚠ Not available from this source: {c.do_not_infer.map((d: string) => d.replace(/_/g, " ")).join(", ")}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            <div className="p-4 border-t border-white/10 bg-slate-900/80 flex justify-end">
-              <button onClick={() => setSelectedListing(null)} className="bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs px-5 py-2.5 rounded-xl">
+            <div className="p-4 border-t border-white/10 bg-slate-900/80 flex justify-between items-center shrink-0">
+              <span className="text-[10px] text-gray-500">
+                {ragContext.length > 0 ? `${ragContext.length} RAG sources loaded` : "Loading…"}
+              </span>
+              <button
+                onClick={() => { setSelectedListing(null); setRagContext([]); }}
+                className="bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs px-5 py-2.5 rounded-xl transition-colors"
+              >
                 Close Snapshot
               </button>
             </div>

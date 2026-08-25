@@ -154,6 +154,87 @@ app.get("/api/sources", async (req: Request, res: Response) => {
   }
 });
 
+// Dedicated Neighborhood Snapshot Endpoint - fetches rich RAG context by area/locality directly
+app.post("/api/snapshot", async (req: Request, res: Response) => {
+  try {
+    const { area, listing } = req.body;
+    if (!area || typeof area !== "string") {
+      return res.status(400).json({ success: false, error: "area is required" });
+    }
+
+    const { generateBgeEmbedding, searchRagChunks } = await import("./ragStore");
+
+    // Search locality RAG by area name
+    const localityQuery = `${area} neighborhood character history development safety`;
+    const queryVec = await generateBgeEmbedding(localityQuery);
+    const ragResults = searchRagChunks(queryVec, 5);
+
+    // Filter for this specific locality and nearby regions
+    const areaLower = area.toLowerCase();
+    const localityMatches = ragResults.filter(r =>
+      (r.locality && r.locality.toLowerCase().includes(areaLower)) ||
+      (r.embedding_text && r.embedding_text.toLowerCase().includes(areaLower))
+    );
+
+    // Also search safety-specific context
+    const safetyQuery = `${area} safety crime night`;
+    const safetyVec = await generateBgeEmbedding(safetyQuery);
+    const safetyResults = searchRagChunks(safetyVec, 3);
+    const safetyMatches = safetyResults.filter(r =>
+      r.document_type === "safety_profile" ||
+      (r.locality && r.locality.toLowerCase().includes(areaLower))
+    );
+
+    // Build combined context list (locality first, then safety, deduped)
+    const seen = new Set<string>();
+    const combinedContext: any[] = [];
+
+    for (const r of [...localityMatches, ...safetyResults.slice(0, 2)]) {
+      if (!seen.has(r.id)) {
+        seen.add(r.id);
+        combinedContext.push({
+          id: r.id,
+          locality: r.locality || area,
+          region: r.region || "Bengaluru",
+          document_type: r.document_type,
+          content: r.content,
+          sources: r.sources,
+          supported_topics: r.supported_topics,
+          do_not_infer: r.do_not_infer,
+          similarity: r.similarity
+        });
+      }
+    }
+
+    // Build property-specific facts from listing data
+    const propertyFacts = listing ? {
+      title: listing.title,
+      area: listing.area,
+      rent: listing.rent,
+      bedrooms: listing.bedrooms,
+      furnishing: listing.furnishing,
+      sqft: listing.sqft,
+      amenities: typeof listing.amenities === "string"
+        ? JSON.parse(listing.amenities)
+        : (listing.amenities || []),
+      society_name: listing.society_name,
+      description: listing.description
+    } : null;
+
+    res.json({
+      success: true,
+      area,
+      locality_context: combinedContext,
+      property_facts: propertyFacts,
+      sources_cited: [...new Set(combinedContext.flatMap(c => c.sources || []))],
+      rag_chunks_found: combinedContext.length
+    });
+  } catch (err: any) {
+    console.error("Error generating snapshot:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Conversational Agent RAG + Tool Query Endpoint
 app.post("/api/query", async (req: Request, res: Response) => {
   try {
