@@ -230,6 +230,23 @@ export const BuyTab: React.FC = () => {
     return await fetch(`http://localhost:4000/api${endpoint}`, options);
   };
 
+  const handleOpenSnapshot = async (item: Listing) => {
+    setSelectedListing(item);
+    try {
+      const res = await fetchWithFallback("/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ transcript: `Tell me about ${item.area}` })
+      });
+      const data = await res.json();
+      if (data.retrieved_rag_context && data.retrieved_rag_context.length > 0) {
+        setRagContext(data.retrieved_rag_context);
+      }
+    } catch (e) {
+      console.warn("Failed to load RAG snapshot guide:", e);
+    }
+  };
+
   // Execute Voice / Text Query against /api/query
   const handleQuerySubmit = async (queryText?: string) => {
     const textToSubmit = queryText || transcriptInput;
@@ -796,7 +813,7 @@ export const BuyTab: React.FC = () => {
                     </button>
 
                     <button
-                      onClick={() => setSelectedListing(item)}
+                      onClick={() => handleOpenSnapshot(item)}
                       className="bg-slate-900 hover:bg-slate-800 text-gray-300 text-xs px-3.5 py-3 rounded-xl transition-colors font-medium border border-white/10"
                     >
                       Snapshot & Guide
@@ -863,15 +880,17 @@ export const BuyTab: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="space-y-1.5">
-                      <p className="text-gray-400 font-medium">Nearby Transit Points:</p>
-                      {selectedListing.snapshot.transit_points.map((poi, idx) => (
-                        <div key={idx} className="flex justify-between text-gray-300 bg-slate-950/50 p-2.5 rounded-xl">
-                          <span>{poi.name}</span>
-                          <span className="font-mono text-teal-400">{poi.distance_km} km</span>
-                        </div>
-                      ))}
-                    </div>
+                    {Array.isArray(selectedListing.snapshot.transit_points) && selectedListing.snapshot.transit_points.length > 0 && (
+                      <div className="space-y-1.5">
+                        <p className="text-gray-400 font-medium">Nearby Transit Points:</p>
+                        {selectedListing.snapshot.transit_points.map((poi: any, idx: number) => (
+                          <div key={idx} className="flex justify-between text-gray-300 bg-slate-950/50 p-2.5 rounded-xl">
+                            <span>{poi.name}</span>
+                            <span className="font-mono text-teal-400">{poi.distance_km} km</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
