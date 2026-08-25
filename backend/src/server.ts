@@ -519,6 +519,28 @@ app.post("/api/tts", async (req: Request, res: Response) => {
   }
 });
 
+// Diagnostic Endpoint to test live email config
+app.post("/api/test-email", async (req: Request, res: Response) => {
+  try {
+    console.log("Triggering diagnostic test email...");
+    const emailRes = await sendSiteVisitConfirmationEmail({
+      bookingId: "TEST-DIAGNOSTIC",
+      propertyTitle: "Diagnostic Test Property",
+      area: "Bengaluru",
+      rent: 10000,
+      date: "2026-08-28",
+      timeSlot: "10:30 AM",
+      buyerName: "Test Diagnostic",
+      buyerEmail: req.body.email || "aarushigrover18@gmail.com",
+      buyerPhone: "9876543210",
+      broker: { broker_id: 1, name: "Diagnostic Agent", phone: "123", email: "test@example.com", image_url: "none", specialization: "none", rating: 5, total_deals: 1 }
+    });
+    res.json({ success: true, emailRes });
+  } catch (e: any) {
+    res.json({ success: false, error: e.message, stack: e.stack });
+  }
+});
+
 // Process Error Guards to prevent container crash on transient network glitches
 process.on("unhandledRejection", (reason, promise) => {
   console.warn("[SERVER WARNING] Unhandled Rejection at:", promise, "reason:", reason);
