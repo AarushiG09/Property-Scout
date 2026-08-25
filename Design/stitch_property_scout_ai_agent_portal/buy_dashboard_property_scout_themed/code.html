@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Scout - Buy Workspace</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-bright": "#fcf8fa",
+                "inverse-surface": "#303032",
+                "on-primary-container": "#7c839b",
+                "on-tertiary-fixed": "#00201c",
+                "tertiary-container": "#00201c",
+                "tertiary-fixed-dim": "#4fdbc8",
+                "tertiary-fixed": "#71f8e4",
+                "on-primary": "#ffffff",
+                "on-primary-fixed": "#131b2e",
+                "on-surface-variant": "#45464d",
+                "on-tertiary": "#ffffff",
+                "secondary-container": "#99efe5",
+                "primary-container": "#131b2e",
+                "on-error": "#ffffff",
+                "inverse-on-surface": "#f3f0f2",
+                "surface-tint": "#565e74",
+                "outline": "#76777d",
+                "surface": "#fcf8fa",
+                "surface-container-highest": "#e4e2e4",
+                "on-error-container": "#93000a",
+                "primary": "#000000",
+                "error": "#ba1a1a",
+                "inverse-primary": "#bec6e0",
+                "primary-fixed-dim": "#bec6e0",
+                "primary-fixed": "#dae2fd",
+                "surface-variant": "#e4e2e4",
+                "error-container": "#ffdad6",
+                "outline-variant": "#c6c6cd",
+                "on-secondary-container": "#006f67",
+                "on-surface": "#1b1b1d",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed": "#00201d",
+                "on-tertiary-fixed-variant": "#005048",
+                "on-secondary-fixed-variant": "#00504a",
+                "surface-container-high": "#eae7e9",
+                "on-background": "#1b1b1d",
+                "surface-container": "#f0edef",
+                "on-tertiary-container": "#009485",
+                "secondary": "#006a63",
+                "secondary-fixed-dim": "#80d5cb",
+                "on-primary-fixed-variant": "#3f465c",
+                "surface-container-low": "#f6f3f5",
+                "surface-dim": "#dcd9db",
+                "on-secondary": "#ffffff",
+                "secondary-fixed": "#9cf2e8",
+                "tertiary": "#000000",
+                "background": "#fcf8fa"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "stack-xl": "48px",
+                "margin-mobile": "16px",
+                "stack-sm": "8px",
+                "stack-md": "16px",
+                "container-max": "1440px",
+                "stack-lg": "24px",
+                "stack-xs": "4px",
+                "gutter": "24px",
+                "margin-desktop": "32px"
+        },
+        "fontFamily": {
+                "label-md": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "label-sm": [
+                        "Inter"
+                ],
+                "headline-xl": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Inter"
+                ],
+                "body-sm": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-xl": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-[#0B0F1A] text-white font-body-md text-body-md antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-[#0B0F1A] border-r border-white/10 shadow-sm fixed left-0 top-0 bottom-0 flex flex-col p-stack-md gap-stack-lg z-40 w-64 hidden md:flex">
+<div class="flex flex-col gap-stack-sm mb-stack-lg">
+<div class="flex items-center gap-stack-sm">
+<img alt="Property Scout Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtgVORKLm4lwmj8qFiqxDDhDI5_35OZ_0JpFrIJbzwc1BbBzdJ-NVxBHjCu5ok6c8guDATyx8s1PdDOHGae1pX1E-7Z0HPoIom8caXUYeEMFOxuCX9y7XhFIcVbH6aJmOhi-WB_h75RoiwfY2iIZUyUh8l8qwFz5Rhezo5x7VshEs8E8jXFm8C8kuU5gYldjBTXEz1eD7-OBkL9J7dhTeGvAeWKEfJgu3Na5LmrzxoQfRTwxRzVuQwasT8"/>
+<span class="font-headline-md text-headline-md font-bold text-white">Property Scout</span>
+</div>
+<span class="font-label-sm text-label-sm text-gray-400 pl-10">AI Voice Assistant</span>
+</div>
+<button class="w-full bg-[#0F766E] text-white font-label-md text-label-md py-stack-sm px-stack-md rounded-lg flex items-center justify-center gap-stack-sm shadow-sm hover:opacity-90 transition-opacity mb-stack-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+            New Property
+        </button>
+<ul class="flex flex-col gap-stack-xs flex-1">
+<li>
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">home</span>
+                    Home
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-stack-md bg-[#0F766E]/10 text-[#0F766E] rounded-lg px-stack-md py-stack-sm transition-all duration-200 ease-in-out font-body-md text-body-md font-medium" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+                    Buy Workspace
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">sell</span>
+                    Sell Workspace
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+                    Analytics
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">help</span>
+                    Support
+                </a>
+</li>
+</ul>
+<div class="mt-auto border-t border-white/10 pt-stack-md flex flex-col gap-stack-xs">
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+                User Profile
+            </a>
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="md:ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top Utility Bar -->
+<header class="bg-[#0B0F1A] border-b border-white/10 px-margin-desktop py-stack-md flex justify-between items-center z-10">
+<div class="md:hidden flex items-center gap-stack-sm">
+<img alt="Property Scout Logo" class="w-6 h-6 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtgVORKLm4lwmj8qFiqxDDhDI5_35OZ_0JpFrIJbzwc1BbBzdJ-NVxBHjCu5ok6c8guDATyx8s1PdDOHGae1pX1E-7Z0HPoIom8caXUYeEMFOxuCX9y7XhFIcVbH6aJmOhi-WB_h75RoiwfY2iIZUyUh8l8qwFz5Rhezo5x7VshEs8E8jXFm8C8kuU5gYldjBTXEz1eD7-OBkL9J7dhTeGvAeWKEfJgu3Na5LmrzxoQfRTwxRzVuQwasT8"/>
+<span class="font-headline-md text-headline-md font-bold text-white">Property Scout</span>
+</div>
+<div class="hidden md:flex bg-white/5 border border-white/10 rounded-full p-1 shadow-sm">
+<button class="px-4 py-1.5 rounded-full bg-white/10 shadow-sm text-white font-label-md text-label-md">BUY</button>
+<button class="px-4 py-1.5 rounded-full text-gray-400 hover:text-white font-label-md text-label-md transition-colors">SELL</button>
+</div>
+<div class="flex items-center gap-stack-md">
+<span class="material-symbols-outlined text-gray-400 cursor-pointer hover:text-white transition-colors">notifications</span>
+<div class="w-8 h-8 rounded-full bg-[#0F766E] flex items-center justify-center text-white font-bold text-label-md">JD</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-stack-lg max-w-[1440px] mx-auto w-full">
+<div class="flex flex-col gap-stack-xs">
+<h1 class="font-headline-xl text-headline-xl text-white font-bold tracking-tight">Find the right property for your client</h1>
+<p class="font-body-lg text-body-lg text-gray-400">Manage active buyer requirements and matches.</p>
+</div>
+<!-- Summary Cards -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<div class="bg-white/5 rounded-xl p-stack-md border border-white/10 shadow-sm flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-gray-400 uppercase tracking-wider">Active Listings</span>
+<span class="material-symbols-outlined text-[#0F766E] text-[20px]">list_alt</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-white font-semibold">128</span>
+</div>
+<div class="bg-white/5 rounded-xl p-stack-md border border-white/10 shadow-sm flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-gray-400 uppercase tracking-wider">Shortlisted</span>
+<span class="material-symbols-outlined text-[#0F766E] text-[20px]">favorite</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-white font-semibold">8</span>
+</div>
+<div class="bg-white/5 rounded-xl p-stack-md border border-white/10 shadow-sm flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-gray-400 uppercase tracking-wider">Matches</span>
+<span class="material-symbols-outlined text-[#0F766E] text-[20px]">auto_awesome</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-white font-semibold">12</span>
+</div>
+<div class="bg-white/5 rounded-xl p-stack-md border border-white/10 shadow-sm flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-gray-400 uppercase tracking-wider">Site Visits</span>
+<span class="material-symbols-outlined text-[#0F766E] text-[20px]">directions_walk</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-white font-semibold">3</span>
+</div>
+</div>
+<!-- Client Preference Panel (Bento Style) -->
+<div class="bg-white/5 rounded-xl p-stack-lg border border-white/10 shadow-sm flex flex-col md:flex-row gap-stack-lg items-start md:items-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-[#0F766E] rounded-full blur-3xl opacity-10 -mr-20 -mt-20 pointer-events-none"></div>
+<div class="flex-1 flex flex-col gap-stack-md z-10">
+<h2 class="font-headline-md text-headline-md text-white">Current Client Preferences</h2>
+<div class="flex flex-wrap gap-stack-sm">
+<span class="bg-white/10 border border-white/10 px-3 py-1.5 rounded-full font-label-sm text-label-sm text-white flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[16px] text-[#0F766E]">location_on</span> Koramangala</span>
+<span class="bg-white/10 border border-white/10 px-3 py-1.5 rounded-full font-label-sm text-label-sm text-white flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[16px] text-[#0F766E]">payments</span> ₹35,000/month</span>
+<span class="bg-white/10 border border-white/10 px-3 py-1.5 rounded-full font-label-sm text-label-sm text-white flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[16px] text-[#0F766E]">bed</span> 2 BHK</span>
+<span class="bg-white/10 border border-white/10 px-3 py-1.5 rounded-full font-label-sm text-label-sm text-white flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[16px] text-[#0F766E]">directions_car</span> Parking</span>
+</div>
+</div>
+<div class="bg-[#0B0F1A] p-stack-md rounded-xl border border-white/10 shadow-sm flex items-center gap-stack-md w-full md:w-auto z-10">
+<button class="w-12 h-12 rounded-full bg-[#0F766E] text-white flex items-center justify-center shadow-md hover:bg-[#0F766E]/90 transition-colors shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-gray-400 italic">"Tell Property Scout what you're looking for..."</span>
+<div class="flex items-center gap-1 mt-1 h-3 opacity-50">
+<div class="w-1 h-2 bg-[#0F766E] rounded-full animate-pulse"></div>
+<div class="w-1 h-3 bg-[#0F766E] rounded-full animate-pulse delay-75"></div>
+<div class="w-1 h-1 bg-[#0F766E] rounded-full animate-pulse delay-150"></div>
+<div class="w-1 h-2 bg-[#0F766E] rounded-full animate-pulse delay-75"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Grid -->
+<div class="flex flex-col gap-stack-md mt-stack-sm">
+<div class="flex justify-between items-end border-b border-white/10 pb-stack-sm">
+<h3 class="font-headline-md text-headline-md text-white">Top AI Matches</h3>
+<button class="text-[#0F766E] font-label-md text-label-md hover:underline">View All</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-white/5 rounded-xl border border-white/10 shadow-sm overflow-hidden flex flex-col group hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.3)] transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover" data-alt="A bright, modern luxury apartment interior in a high-rise building. The living room features floor-to-ceiling windows with a city view, minimalist corporate styling, soft natural lighting, light neutral tones, and subtle teal accents. The aesthetic is clean, professional, and upscale." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx1hCpOAp5sV4r578E1v6FvyivR-I37us1qC0kpC7Qyvo_Y_N7taRzg3l_Od1VPM_wYn140UzZNP8sn7DEQ-Dnghe5HcUjffHypVnaqedCkZKxmA0PC0vY3wGWSmdvdc85NEmHO4WUy28fAFOD3qxsTLVxhY3zHHGxZr1bIjoCbtLIRv__GR6Z44Ce4ukG8OP1zLtXMnGSMudmI4gVpUa59RLzaAfT3V8xkxgkrG7WVWkEYhgHACh6"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0B0F1A] to-transparent"></div>
+<div class="absolute bottom-3 left-3 bg-[#0F766E]/20 text-[#0F766E] font-label-sm text-label-sm px-2 py-1 rounded shadow flex items-center gap-1 backdrop-blur-sm border border-[#0F766E]/30">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span> 94% Match
+                            </div>
+</div>
+<div class="p-stack-md flex flex-col gap-stack-sm flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-md text-headline-md-mobile text-white leading-tight">₹34,500/mo</h4>
+<p class="font-body-sm text-body-sm text-gray-400">2 BHK • 1200 sqft</p>
+</div>
+<span class="material-symbols-outlined text-gray-500 hover:text-[#0F766E] cursor-pointer">favorite_border</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400 font-body-sm text-body-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                Koramangala, 4th Block
+                            </div>
+<div class="mt-auto bg-white/5 p-3 rounded-lg border border-white/5">
+<p class="font-body-sm text-body-sm text-gray-400 line-clamp-2"><span class="font-medium text-gray-300">Why it matches:</span> Hits budget perfectly. Includes requested covered parking and is within 1km of main tech park.</p>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white/5 rounded-xl border border-white/10 shadow-sm overflow-hidden flex flex-col group hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.3)] transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover" data-alt="A sophisticated modern kitchen in a corporate apartment. The space features sleek white cabinetry, stainless steel appliances, dark stone countertops, and minimalist pendant lighting. The setting is bright, pristine, and conveys quiet luxury with a high-end editorial feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ_1vIuJLSNdLu2uC1yev-hUCzA6W4bvFdz-hJvkyWQ_j8j4t6NTfJissv9FaMsK49UJmmX3wtGJEK7_wi6tb5V_0--OJlkPRpEnYWPPN3_mRu4_O5rAmZgsiwCXRefJwfAVb0_tzMzKJqs13NsVvmqxLjWaDxpW3RXEUU-pHosu7hyWF6GAOLNIePRX2ycR7tXT_OKVXQj6zXngFfmTri16Y60MphlyMz0fQqOL6gmWBTMwlmYEWu"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0B0F1A] to-transparent"></div>
+<div class="absolute bottom-3 left-3 bg-[#0F766E]/20 text-[#0F766E] font-label-sm text-label-sm px-2 py-1 rounded shadow flex items-center gap-1 backdrop-blur-sm border border-[#0F766E]/30">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span> 88% Match
+                            </div>
+</div>
+<div class="p-stack-md flex flex-col gap-stack-sm flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-md text-headline-md-mobile text-white leading-tight">₹36,000/mo</h4>
+<p class="font-body-sm text-body-sm text-gray-400">2 BHK • 1350 sqft</p>
+</div>
+<span class="material-symbols-outlined text-gray-500 hover:text-[#0F766E] cursor-pointer">favorite_border</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400 font-body-sm text-body-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                Koramangala, 6th Block
+                            </div>
+<div class="mt-auto bg-white/5 p-3 rounded-lg border border-white/5">
+<p class="font-body-sm text-body-sm text-gray-400 line-clamp-2"><span class="font-medium text-gray-300">Why it matches:</span> Slightly over budget, but offers premium amenities and exactly matches location preference.</p>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white/5 rounded-xl border border-white/10 shadow-sm overflow-hidden flex flex-col group hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.3)] transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist bedroom interior with a large window letting in natural light. The room has neutral white walls, light wood flooring, and simple, elegant corporate-style furniture. The mood is calm, functional, and deeply professional with subtle textural depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB34m7sHqqzppFEvAUYWaW1qVavDV5-JGqyHaiIh_TTeRzydCveqcFzbdfyYhLb0YxhpQl2BJysmyKlph05R9yxqJJquv8V05OwL68qpVFpwllZr7xuUXS2KOhUYetw4As4DYGWTBqmYgzqldn8s5gwGqNUa0qsHOsLBOrbbJQ7PtuaXSurGbU41MxUkeeUr6anWSkjZiA1Fo-Ow6fXq9wtqBmE4lglnT1-IzL4_n3a_Ew4uJIyD7ol"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0B0F1A] to-transparent"></div>
+<div class="absolute bottom-3 left-3 bg-[#0F766E]/20 text-[#0F766E] font-label-sm text-label-sm px-2 py-1 rounded shadow flex items-center gap-1 backdrop-blur-sm border border-[#0F766E]/30">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span> 82% Match
+                            </div>
+</div>
+<div class="p-stack-md flex flex-col gap-stack-sm flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-md text-headline-md-mobile text-white leading-tight">₹32,000/mo</h4>
+<p class="font-body-sm text-body-sm text-gray-400">2 BHK • 1100 sqft</p>
+</div>
+<span class="material-symbols-outlined text-gray-500 hover:text-[#0F766E] cursor-pointer">favorite_border</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400 font-body-sm text-body-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                HSR Layout, Sector 2
+                            </div>
+<div class="mt-auto bg-white/5 p-3 rounded-lg border border-white/5">
+<p class="font-body-sm text-body-sm text-gray-400 line-clamp-2"><span class="font-medium text-gray-300">Why it matches:</span> Under budget and great layout, but location is adjacent to requested area (HSR instead of Koramangala).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pb-stack-xl"></div>
+</div>
+</main>
+</body></html>

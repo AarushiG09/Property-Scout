@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Scout - Add Property</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fcf8fa",
+                        "inverse-surface": "#303032",
+                        "on-primary-container": "#7c839b",
+                        "on-tertiary-fixed": "#00201c",
+                        "tertiary-container": "#00201c",
+                        "tertiary-fixed-dim": "#4fdbc8",
+                        "tertiary-fixed": "#71f8e4",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#131b2e",
+                        "on-surface-variant": "#a3a3a3",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#1e293b",
+                        "primary-container": "#131b2e",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f3f0f2",
+                        "surface-tint": "#565e74",
+                        "outline": "#334155",
+                        "surface": "#1e293b",
+                        "surface-container-highest": "#0f172a",
+                        "on-error-container": "#93000a",
+                        "primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#bec6e0",
+                        "primary-fixed-dim": "#bec6e0",
+                        "primary-fixed": "#dae2fd",
+                        "surface-variant": "#334155",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#334155",
+                        "on-secondary-container": "#ffffff",
+                        "on-surface": "#ffffff",
+                        "surface-container-lowest": "#020617",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "on-secondary-fixed-variant": "#00504a",
+                        "surface-container-high": "#1e293b",
+                        "on-background": "#ffffff",
+                        "surface-container": "#0f172a",
+                        "on-tertiary-container": "#009485",
+                        "secondary": "#0f766e",
+                        "secondary-fixed-dim": "#80d5cb",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-container-low": "#0b0f1a",
+                        "surface-dim": "#dcd9db",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#9cf2e8",
+                        "tertiary": "#000000",
+                        "background": "#0b0f1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-xs": "4px",
+                        "stack-xl": "48px",
+                        "margin-desktop": "32px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant shadow-sm fixed left-0 top-0 bottom-0 p-stack-md gap-stack-lg z-40 w-64">
+<div class="flex items-center gap-3 px-stack-md">
+<img alt="Property Scout Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtgVORKLm4lwmj8qFiqxDDhDI5_35OZ_0JpFrIJbzwc1BbBzdJ-NVxBHjCu5ok6c8guDATyx8s1PdDOHGae1pX1E-7Z0HPoIom8caXUYeEMFOxuCX9y7XhFIcVbH6aJmOhi-WB_h75RoiwfY2iIZUyUh8l8qwFz5Rhezo5x7VshEs8E8jXFm8C8kuU5gYldjBTXEz1eD7-OBkL9J7dhTeGvAeWKEfJgu3Na5LmrzxoQfRTwxRzVuQwasT8"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Property Scout</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AI Voice Assistant</p>
+</div>
+</div>
+<button class="bg-secondary text-on-secondary font-label-md text-label-md rounded-lg py-3 px-4 flex justify-center items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+            New Property
+        </button>
+<div class="flex-1 flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-stack-md text-on-surface-variant px-stack-md py-stack-sm hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-stack-md py-stack-sm hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+                Buy Workspace
+            </a>
+<a class="flex items-center gap-stack-md bg-secondary/10 text-secondary border border-secondary/20 rounded-lg px-stack-md py-stack-sm transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">sell</span>
+                Sell Workspace
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-stack-md py-stack-sm hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-stack-md py-stack-sm hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+<div class="mt-auto flex flex-col gap-2 border-t border-outline-variant pt-4">
+<a class="flex items-center gap-stack-md text-on-surface-variant px-stack-md py-stack-sm hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+                User Profile
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-stack-md py-stack-sm hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar (Mobile) / Minimal Header (Desktop) -->
+<header class="md:hidden flex justify-between items-center px-margin-mobile py-stack-md w-full bg-surface-container-low border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<img alt="Property Scout Logo" class="w-6 h-6 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtgVORKLm4lwmj8qFiqxDDhDI5_35OZ_0JpFrIJbzwc1BbBzdJ-NVxBHjCu5ok6c8guDATyx8s1PdDOHGae1pX1E-7Z0HPoIom8caXUYeEMFOxuCX9y7XhFIcVbH6aJmOhi-WB_h75RoiwfY2iIZUyUh8l8qwFz5Rhezo5x7VshEs8E8jXFm8C8kuU5gYldjBTXEz1eD7-OBkL9J7dhTeGvAeWKEfJgu3Na5LmrzxoQfRTwxRzVuQwasT8"/>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Property Scout</h1>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">menu</span>
+</div>
+</header>
+<div class="hidden md:flex justify-between items-center px-margin-desktop py-stack-md w-full bg-background border-b border-outline-variant sticky top-0 z-30">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Add New Listing</h2>
+<div class="flex gap-4 items-center">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container p-2 rounded-full transition-colors">notifications</span>
+<img alt="Agent Profile" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a real estate agent with a warm smile, well-lit studio lighting, corporate attire, conveying trust and competence in a modern light-mode setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACx5W49CdKyPzel1exp0WHsWhPpN6Uj1i_QOgRHSDKFl_Cc2fmq_tKJhG_60EfezI4S2nyu-ybF_D2TBr2eIebwf9hO3cUk9NYxkXEC7MvJS5Oms0mKcuMEmwVRs-RV5MyoZ0gYRsD2pFE69xH9zY_T9evjfuUebul5ounpDxKGDhh4VBq_e85WryZjDJeeeMShZm9xvPBW3Xoi2r6dOhzE5drjk_CZsUrj3WWmq-Kf0X4fTzapBKd"/>
+</div>
+</div>
+<!-- Wizard Container -->
+<div class="flex-1 overflow-y-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex justify-center">
+<div class="w-full max-w-3xl">
+<!-- Progress Bar -->
+<div class="mb-12">
+<div class="flex justify-between items-center relative">
+<!-- Connecting Line -->
+<div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-[2px] bg-outline-variant z-0"></div>
+<div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1/4 h-[2px] bg-secondary z-0 shadow-[0_0_10px_rgba(15,118,110,0.5)]"></div>
+<!-- Steps -->
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-label-md text-label-md shadow-[0_0_15px_rgba(15,118,110,0.4)]">1</div>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Metadata</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-low border-2 border-outline-variant text-on-surface-variant flex items-center justify-center font-label-md text-label-md">2</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Location</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-low border-2 border-outline-variant text-on-surface-variant flex items-center justify-center font-label-md text-label-md">3</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Terms</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-low border-2 border-outline-variant text-on-surface-variant flex items-center justify-center font-label-md text-label-md">4</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Media</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-low border-2 border-outline-variant text-on-surface-variant flex items-center justify-center font-label-md text-label-md">5</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Privacy</span>
+</div>
+</div>
+</div>
+<!-- Step 1 Content: Glassmorphism/Bento feel -->
+<div class="bg-surface border border-outline-variant rounded-xl shadow-lg p-stack-lg md:p-8 relative overflow-hidden">
+<!-- Decorative subtle gradient bg -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="mb-8">
+<h3 class="font-headline-md text-headline-md md:text-headline-lg font-bold text-on-surface mb-2">Property Metadata</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Let's start with the basic characteristics of the space you are listing.</p>
+</div>
+<form class="space-y-stack-lg relative z-10">
+<!-- Property Type Selection (Bento-style radio buttons) -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-4">Property Type</label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="property_type" type="radio"/>
+<div class="rounded-lg border border-outline-variant p-4 flex flex-col items-center gap-3 hover:bg-surface-container transition-colors peer-checked:border-secondary peer-checked:bg-secondary/10 peer-checked:text-secondary text-on-surface-variant bg-surface-container-low">
+<span class="material-symbols-outlined text-[32px]">apartment</span>
+<span class="font-label-md text-label-md">Apartment</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="property_type" type="radio"/>
+<div class="rounded-lg border border-outline-variant p-4 flex flex-col items-center gap-3 hover:bg-surface-container transition-colors peer-checked:border-secondary peer-checked:bg-secondary/10 peer-checked:text-secondary text-on-surface-variant bg-surface-container-low">
+<span class="material-symbols-outlined text-[32px]">house</span>
+<span class="font-label-md text-label-md">House</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="property_type" type="radio"/>
+<div class="rounded-lg border border-outline-variant p-4 flex flex-col items-center gap-3 hover:bg-surface-container transition-colors peer-checked:border-secondary peer-checked:bg-secondary/10 peer-checked:text-secondary text-on-surface-variant bg-surface-container-low">
+<span class="material-symbols-outlined text-[32px]">domain</span>
+<span class="font-label-md text-label-md">Condo</span>
+</div>
+</label>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- BHK Selection -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2">Bedrooms (BHK)</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow appearance-none">
+<option disabled="" selected="" value="">Select configuration</option>
+<option value="1">1 BHK</option>
+<option value="2">2 BHK</option>
+<option value="3">3 BHK</option>
+<option value="4">4+ BHK</option>
+<option value="studio">Studio</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant mt-8 md:mt-auto">
+<!-- <span class="material-symbols-outlined">expand_more</span> -->
+</div>
+</div>
+<!-- Built-up Area -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2">Built-up Area (Sq.Ft)</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow pl-10 placeholder-on-surface-variant/50" placeholder="e.g. 1200" type="number"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-on-surface-variant text-[20px]">square_foot</span>
+</div>
+</div>
+</div>
+<!-- Year Built & Condition -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2">Year Built</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow placeholder-on-surface-variant/50" placeholder="YYYY" type="number"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2">Condition</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow">
+<option value="excellent">Excellent / New</option>
+<option selected="" value="good">Good</option>
+<option value="fair">Needs Minor Work</option>
+<option value="poor">Fixer Upper</option>
+</select>
+</div>
+</div>
+<!-- Action Area -->
+<div class="pt-6 mt-8 border-t border-outline-variant flex justify-end">
+<button class="bg-secondary text-on-secondary font-label-md text-label-md rounded-lg py-3 px-8 flex items-center justify-center gap-2 hover:bg-secondary/90 hover:shadow-[0_0_15px_rgba(15,118,110,0.4)] transition-all duration-200" type="button">
+                                Continue to Location
+                                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+</body></html>

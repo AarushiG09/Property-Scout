@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html class="antialiased" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Scout - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: '#00C4B5',
+            primaryHover: '#00A396',
+            surface: '#0F172A',
+            surfaceCard: 'rgba(15, 23, 42, 0.6)',
+            border: 'rgba(255, 255, 255, 0.1)',
+            textMain: '#FFFFFF',
+            textMuted: '#94A3B8'
+          },
+          borderRadius: {
+            'md': '0.5rem',
+            'lg': '0.75rem',
+            'xl': '1rem',
+            '2xl': '1.5rem',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-utilities">
+    /* Subtle background pattern */
+    .bg-pattern {
+      background-image: radial-gradient(circle at center, #1f2937 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    
+    /* Ensure the logo fits nicely */
+    .logo-img {
+      object-fit: contain;
+      object-position: center;
+    }
+
+    /* Glassmorphism Input */
+    .glass-input {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .glass-input:focus {
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom-color: #00C4B5;
+      box-shadow: 0 1px 0 0 #00C4B5;
+    }
+  </style>
+</head>
+<body class="bg-surface text-textMain min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style="background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUXAjYOqvU7IxWruv_SaOpznOJWS1e4IKT2puiVfNrQYwp06MR9vAsI2zfX9R68BStCs_rXbLguKOqL91-oY0zehocrwiq96xlQcmiYEwkT8hZqIg26dSXd6qvbkE6mzIPMXkg5f4qzZ71oV6Ojf26Qim29vtnhe312ev5nfDEFFQ0AJ_qfGVulsdJfL5qwgBOTp8MlSv6omukrEAwbMS9-eu1IKKKDKgOjZa8BD4e-EAVOFZ2jmok'); background-size: cover; background-position: center; background-attachment: fixed;">
+<!-- BEGIN: Main Login Container -->
+<main class="w-full max-w-[480px] relative z-10 flex flex-col items-center">
+<!-- BEGIN: Brand Header -->
+<header class="mb-10 flex flex-col items-center text-center w-full">
+<div class="flex items-center justify-center gap-4 mb-2">
+<!-- Logo Image -->
+<div class="w-14 h-14 rounded-2xl bg-transparent flex items-center justify-center">
+<svg fill="none" height="48" viewbox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 4L4 14V34L24 44L44 34V14L24 4Z" stroke="white" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M24 12L12 18V30L24 36L36 30V18L24 12Z" fill="white" fill-opacity="0.2" stroke="white" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h1 class="text-4xl font-extrabold tracking-tight text-white drop-shadow-md">Property Scout</h1>
+</div>
+</header>
+<!-- END: Brand Header -->
+<!-- BEGIN: Login Card -->
+<div class="bg-surfaceCard border border-border rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-10 w-full backdrop-blur-2xl">
+<div class="mb-8">
+<h2 class="text-3xl font-bold mb-2 text-white">Log in</h2>
+<p class="text-textMuted text-base">Enter your credentials and get ready to explore!</p>
+</div>
+<form action="#" class="space-y-6" method="POST">
+<!-- Email Input -->
+<div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-textMuted">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<input class="glass-input block w-full pl-10 text-white rounded-lg sm:text-base placeholder-textMuted/60 py-3.5 transition-all outline-none" id="email" name="email" placeholder="Your Email" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-textMuted">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<input class="glass-input block w-full pl-10 pr-10 text-white rounded-lg sm:text-base placeholder-textMuted/60 py-3.5 transition-all outline-none" id="password" name="password" placeholder="Your Password" required="" type="password"/>
+<!-- Eye icon for password visibility (visual only) -->
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-textMuted hover:text-white transition-colors">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Remember Me & Forgot Password -->
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center">
+<input class="h-4 w-4 rounded border-border bg-transparent text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent cursor-pointer" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block text-sm text-textMuted cursor-pointer hover:text-white transition-colors" for="remember-me">
+            Remember me
+          </label>
+</div>
+<a class="text-sm font-medium text-primary hover:text-white transition-colors" href="#">Forgot Password?</a>
+</div>
+<!-- Submit Button -->
+<button class="w-full flex justify-center py-3.5 px-4 mt-8 border border-transparent rounded-xl shadow-lg text-base font-bold text-surface bg-primary hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface focus:ring-primary transition-all" type="submit">
+          Log in
+        </button>
+</form>
+<!-- Google Login -->
+<div class="mt-6">
+<button class="w-full flex items-center justify-center py-3.5 px-4 border border-border rounded-xl shadow-sm bg-white/5 hover:bg-white/10 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface focus:ring-border transition-all" type="button">
+<svg class="w-5 h-5 mr-3" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+            Log in with Google
+          </button>
+</div>
+</div>
+<!-- END: Login Card -->
+<!-- BEGIN: Footer Links -->
+<p class="mt-8 text-center text-sm text-textMuted backdrop-blur-sm py-1 px-3 rounded-full inline-block">
+      Don't have an account? 
+      <a class="font-medium text-primary hover:text-white transition-colors" href="#">Create account</a>
+</p>
+<!-- END: Footer Links -->
+</main>
+<!-- END: Main Login Container -->
+</body></html>

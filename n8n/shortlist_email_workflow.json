@@ -1,0 +1,70 @@
+{
+  "name": "Property Scout Shortlist PDF & Email Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "shortlist-pdf",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format Shortlist JSON payload into HTML report string\nconst body = $input.item.json.body || $input.item.json;\nconst items = body.shortlist || [];\n\nconst itemsHtml = items.map((item, idx) => `\n  <div style=\"background:#0f172a; border:1px solid #1e293b; border-radius:12px; padding:18px; margin-bottom:16px;\">\n    <h3 style=\"color:#38bdf8; margin:0 0 8px;\">#${idx + 1}. ${item.title}</h3>\n    <p style=\"color:#cbd5e1; margin:4px 0;\">📍 Locality: ${item.area}, Bengaluru</p>\n    <p style=\"color:#2dd4bf; font-weight:bold; margin:4px 0;\">₹${(item.rent || 0).toLocaleString('en-IN')}/mo (${item.bedrooms} BHK)</p>\n  </div>\n`).join('');\n\nreturn [{\n  json: {\n    buyerEmail: body.buyerEmail,\n    buyerName: body.buyerName || 'Scout Renter',\n    htmlReport: itemsHtml,\n    listingCount: items.length\n  }\n}];"
+      },
+      "name": "Format HTML Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@propertyscout.ai",
+        "toEmail": "={{ $json.buyerEmail }}",
+        "subject": "=📋 Property Scout Shortlist Report ({{ $json.listingCount }} Properties)",
+        "html": "=<h2>Hi {{ $json.buyerName }},</h2><p>Here is your shortlist report:</p>{{ $json.htmlReport }}"
+      },
+      "name": "Send Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        710,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format HTML Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format HTML Report": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

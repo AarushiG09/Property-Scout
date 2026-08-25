@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Scout - Sell Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fcf8fa",
+                        "inverse-surface": "#303032",
+                        "on-primary-container": "#7c839b",
+                        "on-tertiary-fixed": "#00201c",
+                        "tertiary-container": "#00201c",
+                        "tertiary-fixed-dim": "#4fdbc8",
+                        "tertiary-fixed": "#71f8e4",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#131b2e",
+                        "on-surface-variant": "#45464d",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#99efe5",
+                        "primary-container": "#131b2e",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f3f0f2",
+                        "surface-tint": "#565e74",
+                        "outline": "#76777d",
+                        "surface": "#fcf8fa",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#bec6e0",
+                        "primary-fixed-dim": "#bec6e0",
+                        "primary-fixed": "#dae2fd",
+                        "surface-variant": "#e4e2e4",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-container": "#006f67",
+                        "on-surface": "#1b1b1d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "on-secondary-fixed-variant": "#00504a",
+                        "surface-container-high": "#eae7e9",
+                        "on-background": "#1b1b1d",
+                        "surface-container": "#f0edef",
+                        "on-tertiary-container": "#009485",
+                        "secondary": "#006a63",
+                        "secondary-fixed-dim": "#80d5cb",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-dim": "#dcd9db",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#9cf2e8",
+                        "tertiary": "#000000",
+                        "background": "#fcf8fa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-xl": "48px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "container-max": "1440px",
+                        "stack-lg": "24px",
+                        "stack-xs": "4px",
+                        "gutter": "24px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #0B0F1A; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill-1 { font-variation-settings: 'FILL' 1; }
+        
+        .table-row-hover:hover { background-color: #1E293B; }
+    </style>
+</head>
+<body class="bg-[#0B0F1A] text-white antialiased flex h-screen overflow-hidden">
+<!-- TopNavBar (Mobile Only) -->
+<nav class="md:hidden flex justify-between items-center px-margin-mobile py-stack-md w-full bg-[#111827] border-b border-gray-800 fixed top-0 z-50">
+<div class="flex items-center gap-2">
+<img alt="Property Scout" class="w-8 h-8 rounded object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtgVORKLm4lwmj8qFiqxDDhDI5_35OZ_0JpFrIJbzwc1BbBzdJ-NVxBHjCu5ok6c8guDATyx8s1PdDOHGae1pX1E-7Z0HPoIom8caXUYeEMFOxuCX9y7XhFIcVbH6aJmOhi-WB_h75RoiwfY2iIZUyUh8l8qwFz5Rhezo5x7VshEs8E8jXFm8C8kuU5gYldjBTXEz1eD7-OBkL9J7dhTeGvAeWKEfJgu3Na5LmrzxoQfRTwxRzVuQwasT8"/>
+<span class="font-headline-md text-headline-md font-bold text-white">Property Scout</span>
+</div>
+<div class="flex items-center gap-4 text-gray-300">
+<span class="material-symbols-outlined cursor-pointer hover:opacity-80">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:opacity-80">menu</span>
+</div>
+</nav>
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 bottom-0 p-stack-md gap-stack-lg z-40 bg-[#111827] border-r border-gray-800 shadow-sm w-64 h-screen">
+<div class="flex flex-col gap-1 mb-4">
+<div class="flex items-center gap-3 px-stack-md">
+<img alt="Property Scout" class="w-8 h-8 rounded object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtgVORKLm4lwmj8qFiqxDDhDI5_35OZ_0JpFrIJbzwc1BbBzdJ-NVxBHjCu5ok6c8guDATyx8s1PdDOHGae1pX1E-7Z0HPoIom8caXUYeEMFOxuCX9y7XhFIcVbH6aJmOhi-WB_h75RoiwfY2iIZUyUh8l8qwFz5Rhezo5x7VshEs8E8jXFm8C8kuU5gYldjBTXEz1eD7-OBkL9J7dhTeGvAeWKEfJgu3Na5LmrzxoQfRTwxRzVuQwasT8"/>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-white leading-tight text-lg">Property Scout</span>
+<span class="font-label-sm text-label-sm text-gray-400">AI Voice Assistant</span>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<!-- Home -->
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-[#1E293B] rounded-lg transition-all duration-200 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:text-white">home</span>
+<span class="font-body-md text-body-md font-medium group-hover:text-white">Home</span>
+</a>
+<!-- Buy Workspace -->
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-[#1E293B] rounded-lg transition-all duration-200 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:text-white">shopping_cart</span>
+<span class="font-body-md text-body-md font-medium group-hover:text-white">Buy Workspace</span>
+</a>
+<!-- Sell Workspace (Active) -->
+<a class="flex items-center gap-stack-md bg-[#0F766E] text-white rounded-lg px-stack-md py-stack-sm transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined fill-1">sell</span>
+<span class="font-body-md text-body-md font-semibold">Sell Workspace</span>
+</a>
+<!-- Analytics -->
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-[#1E293B] rounded-lg transition-all duration-200 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:text-white">query_stats</span>
+<span class="font-body-md text-body-md font-medium group-hover:text-white">Analytics</span>
+</a>
+<!-- Support -->
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-[#1E293B] rounded-lg transition-all duration-200 ease-in-out group mt-auto mb-4" href="#">
+<span class="material-symbols-outlined group-hover:text-white">help</span>
+<span class="font-body-md text-body-md font-medium group-hover:text-white">Support</span>
+</a>
+</nav>
+<div class="flex flex-col gap-2 border-t border-gray-800 pt-4">
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-[#1E293B] rounded-lg transition-all duration-200 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:text-white">account_circle</span>
+<span class="font-body-md text-body-md font-medium group-hover:text-white">User Profile</span>
+</a>
+<a class="flex items-center gap-stack-md text-gray-400 px-stack-md py-stack-sm hover:bg-[#1E293B] rounded-lg transition-all duration-200 ease-in-out group text-red-400" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 pt-20 md:pt-0 overflow-y-auto w-full">
+<!-- Header Area with Workspace Switcher -->
+<header class="bg-[#111827] border-b border-gray-800 px-margin-desktop py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30 shadow-sm">
+<div>
+<h1 class="font-headline-lg text-headline-lg font-semibold text-white mb-1">List a property with confidence</h1>
+<p class="font-body-md text-body-md text-gray-400">Manage your property portfolio and buyer matches.</p>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+<!-- Workspace Switcher -->
+<div class="flex bg-[#1E293B] p-1 rounded-lg border border-gray-700">
+<button class="px-4 py-1.5 rounded-md font-label-md text-label-md text-gray-400 hover:text-white transition-colors">BUY</button>
+<button class="px-4 py-1.5 rounded-md font-label-md text-label-md bg-[#334155] shadow-sm text-white font-semibold">SELL</button>
+</div>
+<button class="bg-[#0F766E] hover:bg-opacity-90 text-white font-label-md text-label-md px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Add Property
+                </button>
+</div>
+</header>
+<div class="p-margin-desktop max-w-container-max mx-auto space-y-8">
+<!-- Summary Cards Bento -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-[#111827] p-6 rounded-2xl border border-gray-800 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-[#0F766E]/20 text-[#0F766E] flex items-center justify-center">
+<span class="material-symbols-outlined">real_estate_agent</span>
+</div>
+<span class="font-label-sm text-label-sm bg-[#1E293B] px-2 py-1 rounded text-gray-400">Current</span>
+</div>
+<div class="flex flex-col gap-1 mt-auto">
+<span class="font-headline-xl text-headline-xl text-white leading-none">6</span>
+<span class="font-body-sm text-body-sm text-gray-400">Active Listings</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-[#111827] p-6 rounded-2xl border border-gray-800 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-[#1E293B] text-gray-400 flex items-center justify-center">
+<span class="material-symbols-outlined">edit_document</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 mt-auto">
+<span class="font-headline-xl text-headline-xl text-white leading-none">2</span>
+<span class="font-body-sm text-body-sm text-gray-400">Drafts</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-[#111827] p-6 rounded-2xl border border-gray-800 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-[#1E293B] text-gray-400 flex items-center justify-center">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+<span class="font-label-sm text-label-sm bg-red-900/30 text-red-400 px-2 py-1 rounded">Action Required</span>
+</div>
+<div class="flex flex-col gap-1 mt-auto">
+<span class="font-headline-xl text-headline-xl text-white leading-none">1</span>
+<span class="font-body-sm text-body-sm text-gray-400">Pending Verification</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-[#111827] p-6 rounded-2xl border border-gray-800 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col bg-gradient-to-br from-[#111827] to-[#0F766E]/10">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-[#0F766E] text-white flex items-center justify-center">
+<span class="material-symbols-outlined">group_add</span>
+</div>
+<span class="flex items-center gap-1 text-sm text-[#0F766E] font-medium">
+<span class="material-symbols-outlined text-sm">trending_up</span> +3 this week
+                        </span>
+</div>
+<div class="flex flex-col gap-1 mt-auto">
+<span class="font-headline-xl text-headline-xl text-white leading-none">14</span>
+<span class="font-body-sm text-body-sm text-gray-400">Total Buyer Matches</span>
+</div>
+</div>
+</section>
+<!-- Properties Table -->
+<section class="bg-[#111827] rounded-2xl border border-gray-800 shadow-sm overflow-hidden flex flex-col">
+<div class="px-6 py-5 border-b border-gray-800 flex justify-between items-center bg-[#111827]">
+<h2 class="font-headline-md text-headline-md font-semibold text-white">Your Properties</h2>
+<div class="flex gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">search</span>
+<input class="pl-9 pr-4 py-2 border border-gray-700 rounded-lg font-body-sm text-body-sm focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] w-64 bg-[#1E293B] text-white placeholder-gray-500" placeholder="Search properties..." type="text"/>
+</div>
+<button class="p-2 border border-gray-700 rounded-lg hover:bg-[#1E293B] text-gray-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="border-b border-gray-800 bg-[#0B0F1A]">
+<th class="py-4 px-6 font-label-md text-label-md text-gray-400 font-semibold">Property</th>
+<th class="py-4 px-6 font-label-md text-label-md text-gray-400 font-semibold">Location</th>
+<th class="py-4 px-6 font-label-md text-label-md text-gray-400 font-semibold">Specs</th>
+<th class="py-4 px-6 font-label-md text-label-md text-gray-400 font-semibold">Price</th>
+<th class="py-4 px-6 font-label-md text-label-md text-gray-400 font-semibold">Status</th>
+<th class="py-4 px-6 font-label-md text-label-md text-gray-400 font-semibold text-center">Matches</th>
+<th class="py-4 px-6 font-label-md text-label-md text-gray-400 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="border-b border-gray-800 table-row-hover group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-[#1E293B] overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A modern luxury apartment exterior in soft daylight, minimalist architectural photography, crisp lines, subtle neutral tones, high-end real estate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvKYIXXXCcz33LugQnohBV8FDyDnOigygT2rMTxdrvSADEpVGo9X9waQTNtnaIMp_6BikZIGt_MeNI4-GvRuCPWDsLKzjNVgHWt7H5eke5EXm86faJkX57vSYM0OZ8lc5y5L0Iku9-r83J7e_3THXiOnsOLzyIp6VQx1SsDprWpnP_0QNFVYDXpzaH6_tM7ZFOUcNNXGpv2md9Wcp4A_xilJhU2_tkiu05ro8Nq-uwuzSw3AK-FARc"/>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-white">Prestige Shantiniketan</span>
+<span class="text-xs text-gray-500">ID: PS-8291</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-gray-300">Whitefield</td>
+<td class="py-4 px-6 text-gray-300">3 BHK</td>
+<td class="py-4 px-6 font-medium text-white">₹1.85 Cr</td>
+<td class="py-4 px-6">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#0F766E]/20 text-[#0F766E] w-fit">Active</span>
+<span class="inline-flex items-center gap-1 text-[10px] text-gray-400">
+<span class="material-symbols-outlined text-[12px] text-[#0F766E]">verified</span> Verified
+                                        </span>
+</div>
+</td>
+<td class="py-4 px-6 text-center">
+<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#0F766E]/20 text-[#0F766E] font-medium">8</span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-gray-400 hover:text-white rounded hover:bg-[#334155] transition-colors" title="View">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 text-gray-400 hover:text-white rounded hover:bg-[#334155] transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-gray-400 hover:text-white rounded hover:bg-[#334155] transition-colors" title="Manage">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-gray-800 table-row-hover group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-[#1E293B] overflow-hidden flex-shrink-0 flex items-center justify-center text-gray-600">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-white">Brigade Gateway</span>
+<span class="text-xs text-gray-500">ID: PS-7742</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-gray-300">Malleswaram</td>
+<td class="py-4 px-6 text-gray-300">2 BHK</td>
+<td class="py-4 px-6 font-medium text-white">₹1.45 Cr</td>
+<td class="py-4 px-6">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#334155] text-gray-300 w-fit">Draft</span>
+</div>
+</td>
+<td class="py-4 px-6 text-center">
+<span class="text-gray-600">-</span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-gray-400 hover:text-white rounded hover:bg-[#334155] transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="table-row-hover group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-[#1E293B] overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A brightly lit luxury villa interior living room, expansive windows showing greenery, high-end contemporary furniture, clean institutional presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMMPhxg6POC05c1Lh5VKSIRQl6YwNXO0wdX6JYwe-n_acsBdxWRg1JaZWZiYaObjr-oF9ePAGXGNs1pU4PRK-05BqHWhP-0M7pnTu0RF_eOlc6tk2UfUZUgFmVbc7AxpH6XGG00S5mGsQSF7pv_y0kTLlPL31QNm9fwW-ecDpVyVHSbo8h1CzbUOeh_v50mN72MSO1AI2P3pLkdT9yNGWtV7YEkaojqwjPmNS7juJ_V1uv_OyHlAwe"/>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-white">Sobha City</span>
+<span class="text-xs text-gray-500">ID: PS-9102</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-gray-300">Hegde Nagar</td>
+<td class="py-4 px-6 text-gray-300">4 BHK Villa</td>
+<td class="py-4 px-6 font-medium text-white">₹4.20 Cr</td>
+<td class="py-4 px-6">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-yellow-900/30 text-yellow-500 w-fit">Pending</span>
+<span class="inline-flex items-center gap-1 text-[10px] text-red-400">
+<span class="material-symbols-outlined text-[12px]">error</span> Needs Docs
+                                        </span>
+</div>
+</td>
+<td class="py-4 px-6 text-center">
+<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#1E293B] text-gray-400 font-medium">3</span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-red-400 hover:bg-red-900/20 rounded transition-colors text-xs font-medium border border-red-500/20" title="Upload">
+                                            Upload Docs
+                                        </button>
+<button class="p-1.5 text-gray-400 hover:text-white rounded hover:bg-[#334155] transition-colors" title="Manage">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-gray-800 bg-[#0B0F1A] flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-gray-400">Showing 1-3 of 9 properties</span>
+<div class="flex gap-1">
+<button class="p-1 border border-gray-700 rounded hover:bg-[#1E293B] text-gray-600" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="p-1 border border-gray-700 rounded hover:bg-[#1E293B] text-gray-400">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

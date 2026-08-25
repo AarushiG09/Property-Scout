@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Scout - Role Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#c6c6cd",
+                      "on-surface": "#1b1b1d",
+                      "surface-tint": "#565e74",
+                      "inverse-surface": "#303032",
+                      "tertiary-container": "#00201c",
+                      "secondary-fixed-dim": "#80d5cb",
+                      "on-tertiary-fixed-variant": "#005048",
+                      "primary": "#000000",
+                      "tertiary-fixed": "#71f8e4",
+                      "tertiary": "#000000",
+                      "surface-variant": "#e4e2e4",
+                      "secondary-container": "#99efe5",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed-dim": "#4fdbc8",
+                      "primary-fixed-dim": "#bec6e0",
+                      "on-secondary-fixed": "#00201d",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#fcf8fa",
+                      "on-secondary-fixed-variant": "#00504a",
+                      "surface-container-low": "#f6f3f5",
+                      "surface": "#fcf8fa",
+                      "background": "#fcf8fa",
+                      "on-primary-container": "#7c839b",
+                      "secondary-fixed": "#9cf2e8",
+                      "error": "#ba1a1a",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-secondary-container": "#006f67",
+                      "on-tertiary-fixed": "#00201c",
+                      "primary-container": "#131b2e",
+                      "error-container": "#ffdad6",
+                      "secondary": "#006a63",
+                      "on-background": "#1b1b1d",
+                      "on-primary-fixed": "#131b2e",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-surface-variant": "#45464d",
+                      "surface-dim": "#dcd9db",
+                      "on-tertiary-container": "#009485",
+                      "surface-container-high": "#eae7e9",
+                      "outline": "#76777d",
+                      "surface-container": "#f0edef",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#f3f0f2",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#bec6e0",
+                      "primary-fixed": "#dae2fd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-xs": "4px",
+                      "stack-xl": "48px",
+                      "margin-desktop": "32px",
+                      "gutter": "24px",
+                      "container-max": "1440px",
+                      "stack-md": "16px",
+                      "margin-mobile": "16px",
+                      "stack-sm": "8px",
+                      "stack-lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .role-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .role-card:hover .cta-button {
+            background-color: #0F766E;
+            color: #ffffff;
+            border-color: #0F766E;
+        }
+        .cta-button {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#0B0F1A] text-white min-h-screen flex flex-col font-sans antialiased">
+<!-- Top Navigation (Suppressed for Linear/Transactional Flow, keeping minimal brand presence) -->
+<header class="w-full flex justify-between items-center px-margin-desktop py-stack-md border-b border-gray-800 bg-transparent">
+<div class="flex items-center gap-3">
+<img alt="Property Scout Logo" class="w-8 h-8 rounded-md object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtgVORKLm4lwmj8qFiqxDDhDI5_35OZ_0JpFrIJbzwc1BbBzdJ-NVxBHjCu5ok6c8guDATyx8s1PdDOHGae1pX1E-7Z0HPoIom8caXUYeEMFOxuCX9y7XhFIcVbH6aJmOhi-WB_h75RoiwfY2iIZUyUh8l8qwFz5Rhezo5x7VshEs8E8jXFm8C8kuU5gYldjBTXEz1eD7-OBkL9J7dhTeGvAeWKEfJgu3Na5LmrzxoQfRTwxRzVuQwasT8"/>
+<span class="font-headline-md text-headline-md text-white tracking-tight">Property Scout</span>
+</div>
+<div>
+<a class="text-gray-400 hover:text-white transition-colors font-label-md text-label-md" href="#">Sign Out</a>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center p-margin-mobile md:p-margin-desktop">
+<div class="max-w-5xl w-full flex flex-col items-center gap-stack-xl">
+<!-- Header Section -->
+<div class="text-center space-y-stack-sm max-w-2xl mx-auto">
+<h1 class="font-headline-xl text-headline-xl text-white">What are you looking to do today?</h1>
+<p class="font-body-lg text-body-lg text-gray-400">Choose a workspace to continue.</p>
+</div>
+<!-- Role Selection Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter w-full">
+<!-- BUY CARD -->
+<a class="role-card bg-white rounded-2xl shadow-lg p-stack-xl flex flex-col h-full cursor-pointer relative overflow-hidden group" href="/buy-workspace">
+<div class="mb-stack-lg flex items-center justify-center w-16 h-16 rounded-full bg-teal-50 text-[#0F766E]">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 0;">search</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-gray-900 mb-stack-sm">Buy</h2>
+<p class="font-body-md text-body-md text-gray-600 mb-stack-lg flex-grow">
+                        Discover rental properties for your clients, compare neighborhoods, and build a shortlist.
+                    </p>
+<ul class="space-y-stack-sm mb-stack-xl">
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Browse listings
+                        </li>
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            AI matching
+                        </li>
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Voice refinement
+                        </li>
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Neighborhood insights
+                        </li>
+</ul>
+<div class="cta-button w-full py-3 px-4 border border-gray-200 text-gray-900 rounded-lg font-label-md text-label-md flex justify-between items-center mt-auto">
+<span>Enter Buy Workspace</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</a>
+<!-- SELL CARD -->
+<a class="role-card bg-white rounded-2xl shadow-lg p-stack-xl flex flex-col h-full cursor-pointer relative overflow-hidden group" href="/sell-workspace">
+<div class="mb-stack-lg flex items-center justify-center w-16 h-16 rounded-full bg-teal-50 text-[#0F766E]">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 0;">real_estate_agent</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-gray-900 mb-stack-sm">Sell</h2>
+<p class="font-body-md text-body-md text-gray-600 mb-stack-lg flex-grow">
+                        Create and manage property listings and connect them with active buyers.
+                    </p>
+<ul class="space-y-stack-sm mb-stack-xl">
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Add new property
+                        </li>
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Manage listings
+                        </li>
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Upload media
+                        </li>
+<li class="flex items-center gap-stack-sm font-body-sm text-body-sm text-gray-700">
+<span class="material-symbols-outlined text-[#0F766E] text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Verify location
+                        </li>
+</ul>
+<div class="cta-button w-full py-3 px-4 border border-gray-200 text-gray-900 rounded-lg font-label-md text-label-md flex justify-between items-center mt-auto">
+<span>Enter Sell Workspace</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+</main>
+</body></html>

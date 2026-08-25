@@ -1,0 +1,5 @@
+{"source_id":"SRC_BENGALURU_RENT","name":"bengaluru.rent","type":"crowdsourced_rental_source","role":"rental_listing_and_rent_context","reliability_note":"User-reported and explicitly described by the site as unverified; do not treat as authoritative market pricing.","verified":"2026-08-09"}
+{"source_id":"SRC_WIKI_NEIGHBORHOODS","name":"Wikipedia — List of neighbourhoods in Bengaluru","type":"public_reference","role":"locality_taxonomy_and_broad_context","verified":"2026-08-09"}
+{"source_id":"SRC_GBA","name":"Greater Bengaluru Authority / BBMP","type":"official_government","role":"administrative_and_geographic_corroboration","verified":"2026-08-09"}
+{"source_id":"SRC_KAR_POLICE_CRIME_2025","name":"Karnataka Open Government Data — Crime Review 2025","type":"official_government_dataset","role":"crime_and_safety_evidence","verified":"2026-08-09"}
+{"source_id":"SRC_OSM_MCP","name":"OpenStreetMap MCP","type":"geospatial_tool","role":"live_or_query_time_geospatial_information","verified":"2026-08-09"}
