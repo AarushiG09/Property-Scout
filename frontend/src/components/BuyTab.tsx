@@ -32,6 +32,7 @@ export const BuyTab: React.FC = () => {
 
   // Drawers & Modals
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
+  const [snapshotLoaded, setSnapshotLoaded] = useState(false);
   const [showSourcesDrawer, setShowSourcesDrawer] = useState(false);
   const [bookingModalListing, setBookingModalListing] = useState<Listing | null>(null);
   const [bookingSuccessCode, setBookingSuccessCode] = useState<string | null>(null);
@@ -233,18 +234,34 @@ export const BuyTab: React.FC = () => {
   const handleOpenSnapshot = async (item: Listing) => {
     setSelectedListing(item);
     setRagContext([]); // clear previous
+    setSnapshotLoaded(false);
+    const controller = new AbortController();
+    const snapshotTimeout = setTimeout(() => {
+      controller.abort();
+      console.warn("[SNAPSHOT] Frontend timeout — clearing spinner after 20s");
+      setRagContext([]);
+      setSnapshotLoaded(true);
+    }, 20000);
+
     try {
       const res = await fetchWithFallback("/snapshot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ area: item.area, listing: item })
+        body: JSON.stringify({ area: item.area, listing: item }),
+        signal: controller.signal
       });
+      clearTimeout(snapshotTimeout);
       const data = await res.json();
       if (data.locality_context && data.locality_context.length > 0) {
         setRagContext(data.locality_context);
       }
-    } catch (e) {
-      console.warn("Failed to load snapshot guide:", e);
+    } catch (e: any) {
+      clearTimeout(snapshotTimeout);
+      if (e?.name !== "AbortError") {
+        console.warn("Failed to load snapshot guide:", e);
+      }
+    } finally {
+      setSnapshotLoaded(true);
     }
   };
 
@@ -989,7 +1006,7 @@ export const BuyTab: React.FC = () => {
 
             <div className="p-4 border-t border-white/10 bg-slate-900/80 flex justify-between items-center shrink-0">
               <span className="text-[10px] text-gray-500">
-                {ragContext.length > 0 ? `${ragContext.length} RAG sources loaded` : "Loading…"}
+                {!snapshotLoaded ? "Loading neighborhood data…" : ragContext.length > 0 ? `${ragContext.length} RAG sources loaded` : "Ready"}
               </span>
               <button
                 onClick={() => { setSelectedListing(null); setRagContext([]); }}

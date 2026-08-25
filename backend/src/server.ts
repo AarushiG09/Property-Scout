@@ -173,34 +173,69 @@ app.get("/api/sources", async (req: Request, res: Response) => {
 
 // Dedicated Neighborhood Snapshot Endpoint - fetches rich RAG context by area/locality directly
 app.post("/api/snapshot", async (req: Request, res: Response) => {
+  // Hard 25-second timeout — prevents Railway from hanging on BGE model cold-start
+  const timeoutHandle = setTimeout(() => {
+    if (!res.headersSent) {
+      console.warn("[SNAPSHOT TIMEOUT] Returning empty context after 25s timeout");
+      res.json({
+        success: true,
+        area: req.body?.area || "",
+        locality_context: [],
+        property_facts: null,
+        sources_cited: [],
+        rag_chunks_found: 0
+      });
+    }
+  }, 25000);
+
   try {
     const { area, listing } = req.body;
     if (!area || typeof area !== "string") {
+      clearTimeout(timeoutHandle);
       return res.status(400).json({ success: false, error: "area is required" });
     }
 
     const { generateBgeEmbedding, searchRagChunks } = await import("./ragStore");
 
-    // Search locality RAG by area name
-    const localityQuery = `${area} neighborhood character history development safety`;
-    const queryVec = await generateBgeEmbedding(localityQuery);
-    const ragResults = searchRagChunks(queryVec, 5);
+    // Wrap BGE embedding in a 8-second timeout to survive cold-start model loading
+    const embeddingWithTimeout = (text: string): Promise<number[]> => {
+      return Promise.race([
+        generateBgeEmbedding(text),
+        new Promise<number[]>((_, reject) =>
+          setTimeout(() => reject(new Error("embedding_timeout")), 8000)
+        )
+      ]);
+    };
 
-    // Filter for this specific locality and nearby regions
+    let queryVec: number[];
+    let safetyVec: number[];
+
+    try {
+      // Search locality RAG by area name
+      const localityQuery = `${area} neighborhood character history development safety`;
+      queryVec = await embeddingWithTimeout(localityQuery);
+    } catch (embErr) {
+      console.warn("[SNAPSHOT] BGE embedding timed out for locality query, using fallback");
+      // Simple deterministic fallback — still performs keyword-based area matching below
+      queryVec = new Array(384).fill(0).map((_, i) => Math.sin(i * area.charCodeAt(0 % area.length)));
+    }
+
+    const ragResults = searchRagChunks(queryVec, 5);
     const areaLower = area.toLowerCase();
     const localityMatches = ragResults.filter(r =>
       (r.locality && r.locality.toLowerCase().includes(areaLower)) ||
       (r.embedding_text && r.embedding_text.toLowerCase().includes(areaLower))
     );
 
-    // Also search safety-specific context
-    const safetyQuery = `${area} safety crime night`;
-    const safetyVec = await generateBgeEmbedding(safetyQuery);
+    try {
+      const safetyQuery = `${area} safety crime night`;
+      safetyVec = await embeddingWithTimeout(safetyQuery);
+    } catch (embErr) {
+      console.warn("[SNAPSHOT] BGE embedding timed out for safety query, using fallback");
+      safetyVec = new Array(384).fill(0).map((_, i) => Math.cos(i * area.charCodeAt(0 % area.length)));
+    }
+
     const safetyResults = searchRagChunks(safetyVec, 3);
-    const safetyMatches = safetyResults.filter(r =>
-      r.document_type === "safety_profile" ||
-      (r.locality && r.locality.toLowerCase().includes(areaLower))
-    );
 
     // Build combined context list (locality first, then safety, deduped)
     const seen = new Set<string>();
@@ -238,17 +273,23 @@ app.post("/api/snapshot", async (req: Request, res: Response) => {
       description: listing.description
     } : null;
 
-    res.json({
-      success: true,
-      area,
-      locality_context: combinedContext,
-      property_facts: propertyFacts,
-      sources_cited: [...new Set(combinedContext.flatMap(c => c.sources || []))],
-      rag_chunks_found: combinedContext.length
-    });
+    clearTimeout(timeoutHandle);
+    if (!res.headersSent) {
+      res.json({
+        success: true,
+        area,
+        locality_context: combinedContext,
+        property_facts: propertyFacts,
+        sources_cited: [...new Set(combinedContext.flatMap(c => c.sources || []))],
+        rag_chunks_found: combinedContext.length
+      });
+    }
   } catch (err: any) {
+    clearTimeout(timeoutHandle);
     console.error("Error generating snapshot:", err);
-    res.status(500).json({ success: false, error: err.message });
+    if (!res.headersSent) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
 });
 

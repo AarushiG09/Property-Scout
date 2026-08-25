@@ -499,7 +499,7 @@ Instructions:
 5. NEVER mention technical implementation jargon like "RAG", "database", "vector store", "index", or "retrieval system" in spoken output. Speak naturally in plain English.`;
 
       const response = await aiClient.models.generateContent({
-        model: "gemini-3.6-flash",
+        model: "gemini-2.0-flash",
         contents: prompt
       });
 
