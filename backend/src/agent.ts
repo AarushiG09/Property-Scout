@@ -638,13 +638,12 @@ ${shortlistSummary}
 ${ragContext.length > 0 ? `\nRetrieved Locality Context:\n${ragSummaryText}\n` : ''}
 ${safetyStatement}
 
-Instructions:
-1. Answer the user's query DIRECTLY using the property data and locality context above.
-2. If the user asks about a property's details, amenities, size, rent, or transit — give specific answers from the data above.
-3. NEVER say "I don't have information" — if you have property data above, use it.
-4. Maintain conversational context from history.
-5. Keep response concise (2-4 sentences).
-6. NEVER use jargon like "RAG", "database", "vector store". Speak naturally.`;
+Instructions — STRICT NO-HALLUCINATION POLICY:
+1. ONLY use facts present in the property data and locality context provided above.
+2. Do NOT invent or assume any details about a locality, amenity, commute time, or distance not present in the data.
+3. If the locality context is empty or insufficient to answer a specific question, say exactly: "I don't have verified data on that specific point" — do not guess.
+4. For property details: use the exact rent, BHK, sqft, furnishing, amenities, and transit data from the shortlist above.
+5. Keep response concise (2-4 sentences). Speak naturally, no technical jargon.`;
 
       const response = await aiClient.models.generateContent({
         model: "gemini-2.0-flash",
@@ -653,23 +652,28 @@ Instructions:
 
       responseText = response.text || `Here are ${enrichedShortlist.length} available properties matching your preferences.`;
     } catch (e) {
+      // Gemini unavailable — use only verified data, no hallucination
       if (isRagTriggered && ragContext.length > 0) {
-        responseText = `${updatedPrefs.area || 'this area'} has ${ragContext[0]?.content?.slice(0, 150) || 'rich history and good connectivity'}. We have ${enrichedShortlist.length} properties shortlisted for you.` + safetyStatement;
+        // Use exact RAG chunk content — never invent locality descriptions
+        responseText = `Here is what I know about ${updatedPrefs.area || ragContext[0]?.locality || 'this area'}: ${ragContext[0].content.slice(0, 250)}. We have ${enrichedShortlist.length} properties shortlisted for you.` + safetyStatement;
       } else if (updatedPrefs.area) {
-        responseText = `I've filtered your search for properties in ${updatedPrefs.area}. Top match: ${enrichedShortlist[0]?.title || 'Property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo.` + safetyStatement;
+        responseText = `I found ${enrichedShortlist.length} properties in ${updatedPrefs.area}. Top match: ${enrichedShortlist[0]?.title || 'property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo (${enrichedShortlist[0]?.bedrooms} BHK, ${enrichedShortlist[0]?.sqft} sqft).` + safetyStatement;
       } else {
-        responseText = `I have shortlisted ${enrichedShortlist.length} available properties in Bengaluru for you. Top Pick: ${enrichedShortlist[0]?.title || 'Property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo.` + safetyStatement;
+        responseText = `I have shortlisted ${enrichedShortlist.length} available properties in Bengaluru. Top pick: ${enrichedShortlist[0]?.title || 'property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo (${enrichedShortlist[0]?.bedrooms} BHK, ${enrichedShortlist[0]?.sqft} sqft).` + safetyStatement;
       }
     }
   } else {
+    // No Gemini API key — strict factual fallback only
     if (isRagTriggered && ragContext.length > 0) {
-      responseText = `${updatedPrefs.area || 'Indiranagar'} is a vibrant, highly sought-after residential and commercial locality in Bengaluru, known for lively avenues like 100 Feet Road, high-end dining, and excellent metro connectivity. We have ${enrichedShortlist.length} properties shortlisted for you in ${updatedPrefs.area || 'this area'}.` + safetyStatement;
+      // Only output actual RAG chunk content — never invent locality info
+      responseText = `Here is what I know about ${updatedPrefs.area || ragContext[0]?.locality || 'this area'}: ${ragContext[0].content.slice(0, 250)}. We have ${enrichedShortlist.length} properties available.` + safetyStatement;
+    } else if (isRagTriggered && ragContext.length === 0) {
+      responseText = `I don't have verified neighborhood background data for ${updatedPrefs.area || 'this area'} at the moment. I can show you ${enrichedShortlist.length} available properties there — ${enrichedShortlist[0]?.title || 'top listing'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo.`;
     } else if (updatedPrefs.area) {
-      responseText = `I've filtered your search for properties in ${updatedPrefs.area}. Top match: ${enrichedShortlist[0]?.title || 'Property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo.` + safetyStatement;
+      responseText = `I found ${enrichedShortlist.length} properties in ${updatedPrefs.area}. Top match: ${enrichedShortlist[0]?.title || 'property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo (${enrichedShortlist[0]?.bedrooms} BHK, ${enrichedShortlist[0]?.sqft} sqft).` + safetyStatement;
     } else {
-      responseText = `I have shortlisted ${enrichedShortlist.length} properties matching your criteria in Bengaluru.\n` +
-        `Top Pick: ${enrichedShortlist[0]?.title || 'Property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo.` +
-        (enrichedShortlist[0]?.snapshot?.commute_summary ? ` (${enrichedShortlist[0].snapshot.commute_summary})` : '') +
+      responseText = `I have shortlisted ${enrichedShortlist.length} available properties in Bengaluru. Top pick: ${enrichedShortlist[0]?.title || 'property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo (${enrichedShortlist[0]?.bedrooms} BHK, ${enrichedShortlist[0]?.sqft} sqft).` +
+        (enrichedShortlist[0]?.snapshot?.commute_summary ? ` ${enrichedShortlist[0].snapshot.commute_summary}` : '') +
         safetyStatement;
     }
   }
