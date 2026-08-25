@@ -12,7 +12,14 @@ export interface SourceCatalogItem {
   url?: string;
 }
 
-const SOURCES_FILE = path.join(__dirname, "../../RAG/sources.jsonl");
+const candidatePaths = [
+  path.join(__dirname, "../../RAG/sources.jsonl"),
+  path.join(__dirname, "../RAG/sources.jsonl"),
+  path.join(process.cwd(), "RAG/sources.jsonl"),
+  path.join(process.cwd(), "backend/RAG/sources.jsonl")
+];
+
+const SOURCES_FILE = candidatePaths.find(p => fs.existsSync(p)) || candidatePaths[0];
 
 let sourceCatalogCache: Record<string, SourceCatalogItem> | null = null;
 

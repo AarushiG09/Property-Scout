@@ -379,10 +379,22 @@ app.post("/api/tts", async (req: Request, res: Response) => {
   }
 });
 
-app.listen(config.port, () => {
+// Process Error Guards to prevent container crash on transient network glitches
+process.on("unhandledRejection", (reason, promise) => {
+  console.warn("[SERVER WARNING] Unhandled Rejection at:", promise, "reason:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("[SERVER ERROR] Uncaught Exception thrown:", err);
+});
+
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : (config.port || 4000);
+const HOST = "0.0.0.0";
+
+app.listen(PORT, HOST, () => {
   console.log("====================================================");
-  console.log(`  PROPERTY SCOUT BACKEND SERVER LISTENING ON PORT ${config.port}`);
-  console.log(`  Health Check: http://localhost:${config.port}/api/health`);
+  console.log(`  PROPERTY SCOUT BACKEND SERVER LISTENING ON ${HOST}:${PORT}`);
+  console.log(`  Health Check: http://${HOST}:${PORT}/api/health`);
   console.log("====================================================");
 });
 

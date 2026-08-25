@@ -36,19 +36,19 @@ This document provides a step-by-step deployment guide for deploying the **Prope
 ### 1.2 Step-by-Step Railway Setup
 1. Log in to [Railway Dashboard](https://railway.app/dashboard) and click **"New Project"**.
 2. Select **"Deploy from GitHub repo"** and choose `AarushiG09/Property-Scout`.
-3. Set the **Root Directory** or **Service Settings**:
-   * **Root Directory**: `backend` (or keep root with build path `backend`).
+3. Set the **Service Settings**:
    * **Build Command**: `npm install`
-   * **Start Command**: `npx tsx src/server.ts`
+   * **Start Command**: `npm start` (runs `npx tsx backend/src/server.ts`)
+   * **Healthcheck Path**: `/api/health`
 4. Configure **Environment Variables** in Railway Dashboard under **Variables**:
    ```env
-   PORT=4000
    NODE_ENV=production
    GEMINI_API_KEY=your_live_gemini_api_key
    GMAIL_USER=aarushigrover18@gmail.com
    GMAIL_PASS=your_gmail_app_password
    N8N_WEBHOOK_URL=http://localhost:5678/webhook/shortlist-pdf
    ```
+   *(Note: Railway automatically provides `PORT`. `server.ts` binds to `0.0.0.0:$PORT` to pass health pings).*
 5. Generate a Public Domain:
    * In Railway Service Settings $\rightarrow$ **Networking** $\rightarrow$ **Generate Domain**.
    * Copy your public Railway URL (e.g., `https://property-scout-backend.up.railway.app`).
