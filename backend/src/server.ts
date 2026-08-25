@@ -27,6 +27,23 @@ initDatabase();
 initRagDatabase();
 loadSourceCatalog().catch(console.error);
 
+// Auto-ingest RAG knowledge base on startup if empty (handles Railway cold start)
+(async () => {
+  try {
+    const ragCount = getRagChunkCount();
+    if (ragCount === 0) {
+      console.log("[RAG AUTO-INGEST] RAG database empty — running docs ingestion now...");
+      const { runDocsIngestion } = await import("../../scraper/docs_ingestion");
+      await runDocsIngestion();
+      console.log(`[RAG AUTO-INGEST] Complete. ${getRagChunkCount()} chunks indexed.`);
+    } else {
+      console.log(`[RAG] ${ragCount} chunks already indexed. Skipping ingestion.`);
+    }
+  } catch (err: any) {
+    console.error("[RAG AUTO-INGEST] Failed:", err.message);
+  }
+})();
+
 // Health check endpoint
 app.get("/api/health", (req: Request, res: Response) => {
   res.json({
