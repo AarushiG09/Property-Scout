@@ -41,6 +41,21 @@ app.get("/api/health", (req: Request, res: Response) => {
   });
 });
 
+// Serve full README.md file directly via API URL
+app.get("/api/readme", (req: Request, res: Response) => {
+  try {
+    const readmePath = path.join(__dirname, "../../README.md");
+    if (fs.existsSync(readmePath)) {
+      const content = fs.readFileSync(readmePath, "utf-8");
+      res.setHeader("Content-Type", "text/plain; charset=utf-8");
+      return res.send(content);
+    }
+    return res.status(404).json({ success: false, error: "README.md file not found" });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Get all active available listings
 app.get("/api/listings", (req: Request, res: Response) => {
   try {

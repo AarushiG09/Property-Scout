@@ -66,6 +66,16 @@ export const Footer: React.FC = () => {
               <HelpCircle className="w-3.5 h-3.5 text-teal-500" />
               FAQs
             </button>
+
+            <a
+              href="https://github.com/AarushiG09/Property-Scout/blob/main/README.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-teal-400 transition-colors flex items-center gap-1.5 text-teal-300 font-semibold bg-teal-950/40 border border-teal-500/30 px-2.5 py-1 rounded-lg"
+            >
+              <FileText className="w-3.5 h-3.5 text-teal-400" />
+              Official README
+            </a>
           </div>
 
           {/* Right Copyright */}
