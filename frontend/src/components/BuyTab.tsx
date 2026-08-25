@@ -198,7 +198,7 @@ export const BuyTab: React.FC = () => {
 
   const fetchListings = async () => {
     try {
-      const res = await fetch("/api/listings");
+      const res = await fetchWithFallback("/listings", { method: "GET" });
       const data = await res.json();
       if (data.success && data.listings) {
         setShortlist(data.listings);
@@ -210,7 +210,7 @@ export const BuyTab: React.FC = () => {
 
   const fetchSources = async () => {
     try {
-      const res = await fetch("/api/sources");
+      const res = await fetchWithFallback("/sources", { method: "GET" });
       const data = await res.json();
       if (data.success && data.sources) {
         setSources(data.sources);

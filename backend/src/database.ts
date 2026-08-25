@@ -128,6 +128,189 @@ export function initDatabase(): void {
     );
   `;
 
+export const DEFAULT_SEED_LISTINGS = [
+  {
+    external_id: "brent_koramangala_101",
+    title: "Spacious 2BHK Apartment in Koramangala 4th Block",
+    rent: 35000,
+    bedrooms: 2,
+    furnishing: "Semi-Furnished",
+    amenities: ["Power Backup", "Car Parking", "Elevator", "Security"],
+    society_name: "Prestige Pinewood",
+    sqft: 1200,
+    availability_status: "Available",
+    latitude: 12.9352,
+    longitude: 77.6245,
+    area: "Koramangala",
+    description: "Well maintained 2BHK near Sony World Signal in Koramangala 4th Block."
+  },
+  {
+    external_id: "brent_koramangala_102",
+    title: "Luxury 3BHK Penthouse in Koramangala 3rd Block",
+    rent: 65000,
+    bedrooms: 3,
+    furnishing: "Fully-Furnished",
+    amenities: ["Swimming Pool", "Gym", "Clubhouse", "Covered Parking"],
+    society_name: "Raheja Residency",
+    sqft: 2100,
+    availability_status: "Available",
+    latitude: 12.9318,
+    longitude: 77.6220,
+    area: "Koramangala",
+    description: "High end penthouse with balcony view in Koramangala 3rd Block."
+  },
+  {
+    external_id: "brent_indiranagar_201",
+    title: "Modern 2BHK near 100 Feet Road Indiranagar",
+    rent: 42000,
+    bedrooms: 2,
+    furnishing: "Fully-Furnished",
+    amenities: ["Balcony", "Metro Connectivity", "24/7 Water", "Security"],
+    society_name: "Indiranagar Palms",
+    sqft: 1350,
+    availability_status: "Available",
+    latitude: 12.9784,
+    longitude: 77.6408,
+    area: "Indiranagar",
+    description: "5 mins walk to Indiranagar Metro Station near 100 Feet Road."
+  },
+  {
+    external_id: "brent_indiranagar_202",
+    title: "Compact 1BHK Flat in Indiranagar 1st Stage",
+    rent: 24000,
+    bedrooms: 1,
+    furnishing: "Semi-Furnished",
+    amenities: ["Bike Parking", "Geyser", "CCTV"],
+    society_name: "Standalone Building",
+    sqft: 650,
+    availability_status: "Available",
+    latitude: 12.9719,
+    longitude: 77.6412,
+    area: "Indiranagar",
+    description: "Ideal for working professionals in Indiranagar 1st Stage."
+  },
+  {
+    external_id: "brent_hsr_301",
+    title: "Premium 3BHK Apartment in HSR Layout Sector 1",
+    rent: 48000,
+    bedrooms: 3,
+    furnishing: "Semi-Furnished",
+    amenities: ["Gated Community", "Gym", "Car Parking", "Children Play Area"],
+    society_name: "Purva Fairmont",
+    sqft: 1650,
+    availability_status: "Available",
+    latitude: 12.9121,
+    longitude: 77.6446,
+    area: "HSR Layout",
+    description: "Spacious layout with modular kitchen in HSR Layout Sector 1."
+  },
+  {
+    external_id: "brent_hsr_302",
+    title: "Affordable 2BHK in HSR Layout Sector 3",
+    rent: 32000,
+    bedrooms: 2,
+    furnishing: "Unfurnished",
+    amenities: ["Parking", "Water Supply"],
+    society_name: "HSR Heights",
+    sqft: 1100,
+    availability_status: "Available",
+    latitude: 12.9110,
+    longitude: 77.6380,
+    area: "HSR Layout",
+    description: "Close to NIFT and BDA Complex in HSR Layout Sector 3."
+  },
+  {
+    external_id: "brent_bellandur_401",
+    title: "2BHK Flat near Ecospace Bellandur Outer Ring Road",
+    rent: 38000,
+    bedrooms: 2,
+    furnishing: "Semi-Furnished",
+    amenities: ["Power Backup", "Gym", "Security", "Visitor Parking"],
+    society_name: "Green Glen Layout Apartments",
+    sqft: 1250,
+    availability_status: "Available",
+    latitude: 12.9260,
+    longitude: 77.6762,
+    area: "Bellandur",
+    description: "Walkable distance to RMZ Ecospace in Bellandur."
+  },
+  {
+    external_id: "brent_whitefield_501",
+    title: "3BHK Luxury Apartment near ITPL Whitefield",
+    rent: 45000,
+    bedrooms: 3,
+    furnishing: "Fully-Furnished",
+    amenities: ["Swimming Pool", "Tennis Court", "Clubhouse", "Metro Access"],
+    society_name: "Prestige Shantiniketan",
+    sqft: 1800,
+    availability_status: "Available",
+    latitude: 12.9857,
+    longitude: 77.7314,
+    area: "Whitefield",
+    description: "Directly opposite ITPL Whitefield."
+  },
+  {
+    external_id: "brent_hebbal_601",
+    title: "3BHK Lake View Flat near Hebbal Flyover",
+    rent: 55000,
+    bedrooms: 3,
+    furnishing: "Semi-Furnished",
+    amenities: ["Lake View", "Clubhouse", "Covered Parking", "24h Power"],
+    society_name: "Godrej Woodsman Estate",
+    sqft: 1950,
+    availability_status: "Available",
+    latitude: 13.0359,
+    longitude: 77.5970,
+    area: "Hebbal",
+    description: "Quick access to Airport Road near Hebbal Flyover."
+  },
+  {
+    external_id: "brent_btm_701",
+    title: "Budget 2BHK in BTM Layout 2nd Stage",
+    rent: 28000,
+    bedrooms: 2,
+    furnishing: "Semi-Furnished",
+    amenities: ["Balcony", "Parking", "Water Storage"],
+    society_name: "BTM Central Residency",
+    sqft: 1050,
+    availability_status: "Available",
+    latitude: 12.9166,
+    longitude: 77.6101,
+    area: "BTM Layout",
+    description: "Near BTM Lake and Ring Road bus stop in BTM 2nd Stage."
+  },
+  {
+    external_id: "brent_rajajinagar_801",
+    title: "3BHK Apartment near Orion Mall Rajajinagar",
+    rent: 50000,
+    bedrooms: 3,
+    furnishing: "Semi-Furnished",
+    amenities: ["Metro Access", "Mall Proximity", "Security", "Elevator"],
+    society_name: "Brigade Gateway",
+    sqft: 1700,
+    availability_status: "Available",
+    latitude: 12.9982,
+    longitude: 77.5558,
+    area: "Rajajinagar",
+    description: "Connected to World Trade Center and Orion Mall in Rajajinagar."
+  },
+  {
+    external_id: "brent_jayanagar_901",
+    title: "Traditional 2BHK Independent House in Jayanagar 4th Block",
+    rent: 36000,
+    bedrooms: 2,
+    furnishing: "Semi-Furnished",
+    amenities: ["Garden", "Car Parking", "Metro Access"],
+    society_name: "Jayanagar Heritage Home",
+    sqft: 1300,
+    availability_status: "Available",
+    latitude: 12.9250,
+    longitude: 77.5838,
+    area: "Jayanagar",
+    description: "Close to Jayanagar BDA Complex and Metro Station."
+  }
+];
+
   db.exec(createListingsTable);
   db.exec(createBrokersTable);
   db.exec(createBookingsTable);
@@ -144,6 +327,31 @@ export function initDatabase(): void {
     }
   });
   seedTx();
+
+  // Auto-seed initial listings if listings table is empty
+  const countRow = db.prepare("SELECT COUNT(*) as count FROM listings").get() as { count: number };
+  if (!countRow || countRow.count === 0) {
+    const insertListingStmt = db.prepare(`
+      INSERT OR REPLACE INTO listings (
+        external_id, title, rent, bedrooms, furnishing, amenities,
+        society_name, sqft, availability_status, latitude, longitude, area, description
+      ) VALUES (
+        @external_id, @title, @rent, @bedrooms, @furnishing, @amenities,
+        @society_name, @sqft, @availability_status, @latitude, @longitude, @area, @description
+      )
+    `);
+
+    const seedListingsTx = db.transaction(() => {
+      for (const item of DEFAULT_SEED_LISTINGS) {
+        insertListingStmt.run({
+          ...item,
+          amenities: JSON.stringify(item.amenities)
+        });
+      }
+    });
+    seedListingsTx();
+    console.log(`Seeded ${DEFAULT_SEED_LISTINGS.length} initial Bengaluru property listings into SQLite database.`);
+  }
 
   console.log(`Database initialized at: ${DB_PATH} with 10 brokers and UNIQUE(broker_id, visit_date, time_slot) constraint.`);
 }
