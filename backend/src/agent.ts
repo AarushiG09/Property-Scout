@@ -404,37 +404,180 @@ export async function processUserQuery(
     };
   }
 
+  // ── PROPERTY DETAIL INTENT ──────────────────────────────────────────────────
+  // Detect queries about a specific property: "tell me about this property",
+  // "what are the amenities", "details of first listing", "describe it", etc.
+  const isPropertyDetailQuery =
+    /tell\s+me\s+(more\s+)?(about|details)/i.test(rawTranscript) ||
+    /what\s+are\s+the\s+(amenities|features|details|specs)/i.test(rawTranscript) ||
+    /describe\s+(this|the|it|first|second|third)/i.test(rawTranscript) ||
+    /(more\s+)?info(?:rmation)?\s+(about|on)\s+(this|the|it|first|second|third)/i.test(rawTranscript) ||
+    /(show|give|share)\s+.{0,20}\s+(details|info|information)/i.test(rawTranscript) ||
+    /what\s+(is|does)\s+(this|the)\s+property/i.test(rawTranscript) ||
+    /(first|second|third|top)\s+(listing|property|result|option)/i.test(rawTranscript) ||
+    lowerTranscript === "details" ||
+    lowerTranscript.includes("property details") ||
+    lowerTranscript.includes("more details") ||
+    lowerTranscript.includes("tell me more");
+
+  if (isPropertyDetailQuery) {
+    let targetIndex = 0;
+    if (/second|2nd/i.test(rawTranscript)) targetIndex = 1;
+    if (/third|3rd/i.test(rawTranscript)) targetIndex = 2;
+
+    const target = enrichedShortlist[targetIndex] || enrichedShortlist[0];
+
+    if (target) {
+      // Build rich OSM transit detail string
+      const transitDetail = target.snapshot?.nearest_metro
+        ? `Nearest metro: ${target.snapshot.nearest_metro.name} (${target.snapshot.nearest_metro.distance_km} km).`
+        : target.snapshot?.commute_summary || "";
+
+      const poiList = (target.snapshot?.essential_pois || []).slice(0, 3)
+        .map(p => `${p.name} (${p.distance_km} km)`).join(", ");
+
+      const amenitiesStr = Array.isArray(target.amenities) && target.amenities.length > 0
+        ? target.amenities.join(", ")
+        : (typeof target.amenities === "string" ? target.amenities : "Not specified");
+
+      // Try to get RAG locality context for this area (keyword-based, no embedding needed)
+      const areaLower = target.area.toLowerCase();
+      const { getRagDatabase } = await import("./ragStore");
+      const ragDb = getRagDatabase();
+      const localityChunks = ragDb.prepare(
+        "SELECT content, locality FROM rag_chunks WHERE LOWER(locality) LIKE ? OR LOWER(embedding_text) LIKE ? LIMIT 2"
+      ).all(`%${areaLower}%`, `%${areaLower}%`) as any[];
+      const localityContext = localityChunks.length > 0
+        ? localityChunks[0].content
+        : null;
+
+      const responseText = config.geminiApiKey
+        ? await (async () => {
+            try {
+              const genaiModule = await import("@google/genai");
+              const aiClient = new genaiModule.GoogleGenAI({ apiKey: config.geminiApiKey });
+              const detailPrompt = `You are Property Scout, an expert Bengaluru real estate voice assistant.
+
+The user asked: "${rawTranscript}"
+
+Here is the full property information:
+- Title: ${target.title}
+- Area/Locality: ${target.area} (${target.society_name})
+- Monthly Rent: ₹${target.rent.toLocaleString('en-IN')}/month
+- Bedrooms: ${target.bedrooms} BHK
+- Size: ${target.sqft} sqft
+- Furnishing: ${target.furnishing}
+- Amenities: ${amenitiesStr}
+- Description: ${target.description || "Not available"}
+- Availability: ${target.availability_status}
+- Transit & Commute: ${transitDetail}
+- Nearby POIs: ${poiList || "Available on request"}
+${localityContext ? `- Neighborhood: ${localityContext}` : ""}
+
+Give a warm, natural 2-4 sentence response covering the key details the user asked about. Be specific and accurate using ONLY the data above.`;
+              const r = await aiClient.models.generateContent({ model: "gemini-2.0-flash", contents: detailPrompt });
+              return r.text || "";
+            } catch { return ""; }
+          })()
+        : "";
+
+      const fallbackText = `${target.title} is a ${target.bedrooms} BHK ${target.furnishing.toLowerCase()} property in ${target.area}, priced at ₹${target.rent.toLocaleString('en-IN')}/month for ${target.sqft} sqft. Amenities include ${amenitiesStr}. ${transitDetail}${localityContext ? " Neighborhood: " + localityContext.slice(0, 120) + "..." : ""}`;
+
+      const finalResponse = responseText || fallbackText;
+
+      updatedPrefs.lastIntent = "search";
+      const newHistory = [...(currentPrefs.history || [])];
+      newHistory.push({ role: "user", content: rawTranscript });
+      newHistory.push({ role: "assistant", content: finalResponse });
+      updatedPrefs.history = newHistory.slice(-10);
+
+      return {
+        success: true,
+        response_text: finalResponse,
+        shortlist: enrichedShortlist,
+        sources: resolveSources(Array.from(sourceIds)),
+        retrieved_rag_context: localityChunks.map((c: any) => ({
+          id: c.id || "detail_chunk",
+          source_id: "SRC_BENGALURU_NEIGHBORHOODS",
+          document_type: "neighborhood_profile",
+          locality: c.locality || target.area,
+          region: "Bengaluru",
+          embedding_text: c.embedding_text || "",
+          content: c.content,
+          sources: [],
+          supported_topics: [],
+          do_not_infer: [],
+          metadata: {},
+          vector: [],
+          similarity: 1.0
+        })),
+        preferences: updatedPrefs
+      };
+    }
+  }
+
   // Check RAG Retrieval Triggers
   const isRagTriggered = shouldTriggerRag(rawTranscript);
 
   if (isRagTriggered) {
-    const queryVector = await generateBgeEmbedding(rawTranscript);
-    const rawRagContext = searchRagChunks(queryVector, 2);
+    // Use embedding with timeout to avoid hanging on Railway cold starts
+    const embeddingWithTimeout = (text: string): Promise<number[]> =>
+      Promise.race([
+        generateBgeEmbedding(text),
+        new Promise<number[]>((_, rej) => setTimeout(() => rej(new Error("timeout")), 6000))
+      ]);
 
-    // Filter RAG chunks strictly by requested locality if specified
-    if (updatedPrefs.area) {
-      ragContext = rawRagContext.filter(c => Boolean(c.locality) && c.locality!.toLowerCase().includes(updatedPrefs.area!.toLowerCase()));
-    } else {
-      ragContext = rawRagContext;
+    let queryVector: number[];
+    try {
+      queryVector = await embeddingWithTimeout(rawTranscript);
+    } catch {
+      // Fallback: keyword-based locality search directly from SQLite
+      queryVector = [];
+    }
+
+    if (queryVector.length > 0) {
+      const rawRagContext = searchRagChunks(queryVector, 3);
+      // Filter by locality if area is known
+      ragContext = updatedPrefs.area
+        ? rawRagContext.filter(c => Boolean(c.locality) && c.locality!.toLowerCase().includes(updatedPrefs.area!.toLowerCase()))
+        : rawRagContext;
+    }
+
+    // If no vector results OR area not found, fall back to direct SQLite keyword match
+    if (ragContext.length === 0 && updatedPrefs.area) {
+      const areaLower = updatedPrefs.area.toLowerCase();
+      const { getRagDatabase } = await import("./ragStore");
+      const ragDb = getRagDatabase();
+      const rows = ragDb.prepare(
+        "SELECT * FROM rag_chunks WHERE LOWER(locality) LIKE ? OR LOWER(embedding_text) LIKE ? LIMIT 3"
+      ).all(`%${areaLower}%`, `%${areaLower}%`) as any[];
+      ragContext = rows.map(r => ({
+        id: r.id,
+        source_id: r.source_id,
+        document_type: r.document_type,
+        locality: r.locality,
+        region: r.region,
+        embedding_text: r.embedding_text,
+        content: r.content,
+        sources: JSON.parse(r.sources_json || "[]"),
+        supported_topics: JSON.parse(r.supported_topics_json || "[]"),
+        do_not_infer: JSON.parse(r.do_not_infer_json || "[]"),
+        metadata: JSON.parse(r.metadata_json || "{}"),
+        vector: [],
+        similarity: 1.0
+      }));
     }
 
     for (const chunk of ragContext) {
-      if (chunk.sources) {
-        chunk.sources.forEach(s => sourceIds.add(s));
-      }
-      if (chunk.source_id) {
-        sourceIds.add(chunk.source_id);
-      }
+      if (chunk.sources) chunk.sources.forEach((s: string) => sourceIds.add(s));
+      if (chunk.source_id) sourceIds.add(chunk.source_id);
     }
 
-    // TEST CASE 10: Query for locality not in corpus (e.g., Sarjapur)
-    const indexedLocalities = ["indiranagar", "koramangala", "hsr layout", "btm layout", "whitefield", "bellandur", "hebbal", "rajajinagar", "jayanagar"];
-    const isUnindexedLocality = updatedPrefs.area && !indexedLocalities.includes(updatedPrefs.area.toLowerCase());
+    // Only return "no data" if we truly have nothing after both vector + keyword search
+    if (ragContext.length === 0) {
+      const requestedLocality = updatedPrefs.area || "this area";
+      const responseText = `I don't have detailed neighborhood background data for ${requestedLocality} yet, but I can show you available properties there. ${enrichedShortlist.length > 0 ? `Top pick: ${enrichedShortlist[0].title} at ₹${enrichedShortlist[0].rent.toLocaleString('en-IN')}/mo.` : ""}`;
 
-    if (ragContext.length === 0 || isUnindexedLocality) {
-      const requestedLocality = updatedPrefs.area || "Sarjapur";
-      const responseText = `I don't have verified locality background data for ${requestedLocality} right now, but I can help you search for available properties across Bengaluru!`;
-      
       updatedPrefs.lastIntent = "rag";
       const newHistory = [...(currentPrefs.history || [])];
       newHistory.push({ role: "user", content: rawTranscript });
@@ -464,9 +607,11 @@ export async function processUserQuery(
     }
   }
 
-  const shortlistSummary = enrichedShortlist.map(l =>
-    `• ${l.title} in ${l.area}: ₹${l.rent.toLocaleString('en-IN')}/mo (${l.bedrooms} BHK, ${l.furnishing}). ${l.snapshot?.commute_summary || ''}`
-  ).join("\n");
+  const shortlistSummary = enrichedShortlist.map(l => {
+    const amenities = Array.isArray(l.amenities) ? l.amenities.join(", ") : (l.amenities || "");
+    const metro = l.snapshot?.nearest_metro ? `Metro: ${l.snapshot.nearest_metro.name} (${l.snapshot.nearest_metro.distance_km} km)` : l.snapshot?.commute_summary || "";
+    return `• ${l.title} | ${l.area} (${l.society_name}) | ₹${l.rent.toLocaleString('en-IN')}/mo | ${l.bedrooms} BHK | ${l.sqft} sqft | ${l.furnishing} | Amenities: ${amenities} | ${metro}`;
+  }).join("\n");
 
   const ragSummaryText = ragContext.map(r => `[${r.locality || 'Locality Info'}]: ${r.content}`).join("\n");
   let responseText = "";
@@ -487,16 +632,19 @@ ${formattedHistory.length > 0 ? formattedHistory : '(Beginning of conversation)'
 
 Current Spoken User Query: "${rawTranscript}"
 Extracted Search Filters: ${JSON.stringify(updatedPrefs)}
-Matching Properties Shortlist:\n${shortlistSummary}
-${ragContext.length > 0 ? `Retrieved Locality Context:\n${ragSummaryText}\n` : ''}
+
+Matching Properties (full details):
+${shortlistSummary}
+${ragContext.length > 0 ? `\nRetrieved Locality Context:\n${ragSummaryText}\n` : ''}
 ${safetyStatement}
 
 Instructions:
-1. Address the user's spoken query directly and naturally in a conversational tone.
-2. Maintain context from recent conversation history above.
-3. If the user is adjusting timing, asking follow-up questions, or chatting, respond directly without repeating full property lists.
-4. Keep response concise (2-3 sentences max).
-5. NEVER mention technical implementation jargon like "RAG", "database", "vector store", "index", or "retrieval system" in spoken output. Speak naturally in plain English.`;
+1. Answer the user's query DIRECTLY using the property data and locality context above.
+2. If the user asks about a property's details, amenities, size, rent, or transit — give specific answers from the data above.
+3. NEVER say "I don't have information" — if you have property data above, use it.
+4. Maintain conversational context from history.
+5. Keep response concise (2-4 sentences).
+6. NEVER use jargon like "RAG", "database", "vector store". Speak naturally.`;
 
       const response = await aiClient.models.generateContent({
         model: "gemini-2.0-flash",
@@ -506,7 +654,7 @@ Instructions:
       responseText = response.text || `Here are ${enrichedShortlist.length} available properties matching your preferences.`;
     } catch (e) {
       if (isRagTriggered && ragContext.length > 0) {
-        responseText = `${updatedPrefs.area || 'Indiranagar'} is a vibrant, highly sought-after residential and commercial locality in Bengaluru, known for lively avenues like 100 Feet Road, high-end dining, and excellent metro connectivity. We have ${enrichedShortlist.length} properties shortlisted for you in ${updatedPrefs.area || 'this area'}.` + safetyStatement;
+        responseText = `${updatedPrefs.area || 'this area'} has ${ragContext[0]?.content?.slice(0, 150) || 'rich history and good connectivity'}. We have ${enrichedShortlist.length} properties shortlisted for you.` + safetyStatement;
       } else if (updatedPrefs.area) {
         responseText = `I've filtered your search for properties in ${updatedPrefs.area}. Top match: ${enrichedShortlist[0]?.title || 'Property'} at ₹${enrichedShortlist[0]?.rent.toLocaleString('en-IN')}/mo.` + safetyStatement;
       } else {
