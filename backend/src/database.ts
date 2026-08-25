@@ -78,56 +78,6 @@ export function getDatabase(): Database.Database {
   return dbInstance;
 }
 
-export function initDatabase(): void {
-  const db = getDatabase();
-
-  const createListingsTable = `
-    CREATE TABLE IF NOT EXISTS listings (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      external_id TEXT UNIQUE NOT NULL,
-      title TEXT NOT NULL,
-      rent INTEGER NOT NULL,
-      bedrooms INTEGER NOT NULL,
-      furnishing TEXT NOT NULL,
-      amenities TEXT NOT NULL,
-      society_name TEXT NOT NULL,
-      sqft INTEGER NOT NULL,
-      availability_status TEXT NOT NULL,
-      latitude REAL NOT NULL,
-      longitude REAL NOT NULL,
-      area TEXT NOT NULL,
-      description TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-  `;
-
-  const createBrokersTable = `
-    CREATE TABLE IF NOT EXISTS brokers (
-      broker_id INTEGER PRIMARY KEY,
-      name TEXT NOT NULL,
-      phone TEXT NOT NULL,
-      email TEXT NOT NULL
-    );
-  `;
-
-  const createBookingsTable = `
-    CREATE TABLE IF NOT EXISTS site_visit_bookings (
-      booking_id TEXT PRIMARY KEY,
-      broker_id INTEGER NOT NULL,
-      listing_id TEXT NOT NULL,
-      property_title TEXT NOT NULL,
-      buyer_name TEXT NOT NULL,
-      buyer_email TEXT NOT NULL,
-      buyer_phone TEXT NOT NULL,
-      visit_date TEXT NOT NULL,
-      time_slot TEXT NOT NULL,
-      status TEXT DEFAULT 'CONFIRMED',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (broker_id) REFERENCES brokers (broker_id),
-      CONSTRAINT unique_broker_slot UNIQUE (broker_id, visit_date, time_slot)
-    );
-  `;
-
 export const DEFAULT_SEED_LISTINGS = [
   {
     external_id: "brent_koramangala_101",
@@ -310,6 +260,56 @@ export const DEFAULT_SEED_LISTINGS = [
     description: "Close to Jayanagar BDA Complex and Metro Station."
   }
 ];
+
+export function initDatabase(): void {
+  const db = getDatabase();
+
+  const createListingsTable = `
+    CREATE TABLE IF NOT EXISTS listings (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      external_id TEXT UNIQUE NOT NULL,
+      title TEXT NOT NULL,
+      rent INTEGER NOT NULL,
+      bedrooms INTEGER NOT NULL,
+      furnishing TEXT NOT NULL,
+      amenities TEXT NOT NULL,
+      society_name TEXT NOT NULL,
+      sqft INTEGER NOT NULL,
+      availability_status TEXT NOT NULL,
+      latitude REAL NOT NULL,
+      longitude REAL NOT NULL,
+      area TEXT NOT NULL,
+      description TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  const createBrokersTable = `
+    CREATE TABLE IF NOT EXISTS brokers (
+      broker_id INTEGER PRIMARY KEY,
+      name TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      email TEXT NOT NULL
+    );
+  `;
+
+  const createBookingsTable = `
+    CREATE TABLE IF NOT EXISTS site_visit_bookings (
+      booking_id TEXT PRIMARY KEY,
+      broker_id INTEGER NOT NULL,
+      listing_id TEXT NOT NULL,
+      property_title TEXT NOT NULL,
+      buyer_name TEXT NOT NULL,
+      buyer_email TEXT NOT NULL,
+      buyer_phone TEXT NOT NULL,
+      visit_date TEXT NOT NULL,
+      time_slot TEXT NOT NULL,
+      status TEXT DEFAULT 'CONFIRMED',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (broker_id) REFERENCES brokers (broker_id),
+      CONSTRAINT unique_broker_slot UNIQUE (broker_id, visit_date, time_slot)
+    );
+  `;
 
   db.exec(createListingsTable);
   db.exec(createBrokersTable);
