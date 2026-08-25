@@ -11,6 +11,7 @@ import { processUserQuery, refineShortlist, UserPreferences } from "./agent";
 import { sendSiteVisitConfirmationEmail, sendOwnerListingConfirmationEmail } from "./emailService";
 import { triggerN8nShortlistWorkflow } from "./n8nWorkflow";
 import { book_visit, find_available_broker, find_open_time_slots } from "./brokerService";
+import { EdgeTTS } from "node-edge-tts";
 
 const app = express();
 
@@ -247,55 +248,41 @@ app.get("/api/broker-preview", (req: Request, res: Response) => {
   }
 });
 
-async function generateEdgeTtsAudio(text: string, voice = "en-IN-NeerjaNeural"): Promise<string | null> {
-  return new Promise((resolve) => {
-    const id = Date.now() + "_" + Math.random().toString(36).substring(7);
-    const tmpTxtFile = path.join("/tmp", `tts_input_${id}.txt`);
-    const tmpAudioFile = path.join("/tmp", `tts_out_${id}.mp3`);
+/**
+ * Native Node.js Text-to-Speech synthesizer using Microsoft Edge Neural TTS ("en-IN-NeerjaNeural").
+ * Runs directly in Node.js without requiring python3 or external CLI tools.
+ */
+async function generateEdgeTtsAudio(text: string, voice: string = "en-IN-NeerjaNeural"): Promise<string | null> {
+  const cleanText = text.replace(/[*#_`]/g, "").replace(/\[.*?\]/g, "").trim();
+  if (!cleanText) return null;
 
-    // Normalize curly quotes to straight apostrophes and preserve all contractions!
-    const normalizedText = text
-      .replace(/[’‘]/g, "'")
-      .replace(/[“”]/g, '"')
-      .replace(/[\r\n]+/g, " ")
-      .trim();
+  const tmpDir = path.join(__dirname, "../data");
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir, { recursive: true });
+  }
 
-    console.log(`[TTS RAW INPUT] Preserved contractions input: "${normalizedText.slice(0, 70)}..."`);
+  const tmpAudioFile = path.join(tmpDir, `tts_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.mp3`);
+  const startTime = Date.now();
 
-    try {
-      fs.writeFileSync(tmpTxtFile, normalizedText, "utf8");
-    } catch (e) {
-      console.warn("[EDGE-TTS ERROR] Failed to write temp text file:", e);
-      resolve(null);
-      return;
+  try {
+    const tts = new EdgeTTS({ voice, timeout: 10000 });
+    await tts.ttsPromise(cleanText, tmpAudioFile);
+
+    if (fs.existsSync(tmpAudioFile)) {
+      const audioBuffer = fs.readFileSync(tmpAudioFile);
+      const base64 = audioBuffer.toString("base64");
+      fs.unlinkSync(tmpAudioFile);
+      console.log(`[EDGE-TTS NODE SUCCESS] Generated ${audioBuffer.length} bytes in ${Date.now() - startTime}ms using voice ${voice}`);
+      return base64;
     }
+  } catch (err: any) {
+    console.warn(`[EDGE-TTS NODE ERROR] Synthesis failed after ${Date.now() - startTime}ms:`, err?.message || err);
+    if (fs.existsSync(tmpAudioFile)) {
+      try { fs.unlinkSync(tmpAudioFile); } catch (e) {}
+    }
+  }
 
-    const cmd = `python3 -m edge_tts --file "${tmpTxtFile}" --voice "${voice}" --write-media "${tmpAudioFile}"`;
-    const startTime = Date.now();
-
-    exec(cmd, { timeout: 12000 }, (error) => {
-      const duration = Date.now() - startTime;
-      if (fs.existsSync(tmpTxtFile)) {
-        try { fs.unlinkSync(tmpTxtFile); } catch (e) {}
-      }
-
-      if (error || !fs.existsSync(tmpAudioFile)) {
-        console.warn(`[EDGE-TTS ERROR] Synthesis failed after ${duration}ms:`, error);
-        resolve(null);
-        return;
-      }
-      try {
-        const audioBuffer = fs.readFileSync(tmpAudioFile);
-        const base64 = audioBuffer.toString("base64");
-        fs.unlinkSync(tmpAudioFile);
-        console.log(`[EDGE-TTS SUCCESS] Generated ${audioBuffer.length} bytes in ${duration}ms using voice ${voice}`);
-        resolve(base64);
-      } catch (e) {
-        console.warn("[EDGE-TTS ERROR] File read error:", e);
-        resolve(null);
-      }
-    });
-  });
+  return null;
 }
 
 // High Quality Text-to-Speech (Sarvam AI + Edge-TTS Neural Fallback) Endpoint
