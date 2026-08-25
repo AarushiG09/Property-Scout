@@ -169,6 +169,37 @@ async function getTransporter(): Promise<{ transporter: nodemailer.Transporter; 
 }
 
 /**
+ * Helper to route emails through Vercel if live credentials are provided.
+ * Railway blocks outbound SMTP, so we proxy the email through the frontend's Vercel Serverless Function.
+ */
+async function sendMailProxy(transporter: any, mailOptions: any) {
+  if (process.env.GMAIL_USER && process.env.GMAIL_PASS && process.env.NODE_ENV === "production") {
+    console.log("[EMAIL SERVICE] Proxying email through Vercel Serverless Function to bypass Railway SMTP blocks");
+    const res = await fetch("https://property-scout-phi.vercel.app/api/emailProxy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mailOptions,
+        GMAIL_USER: process.env.GMAIL_USER,
+        GMAIL_PASS: process.env.GMAIL_PASS
+      })
+    });
+    
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Vercel Email Proxy Error: ${text}`);
+    }
+    
+    const data = await res.json();
+    if (!data.success) throw new Error(`Vercel Email Proxy Error: ${data.error}`);
+    return { messageId: data.messageId };
+  }
+  
+  // Local fallback / Ethereal fallback
+  return await transporter.sendMail(mailOptions);
+}
+
+/**
  * Sends a site visit confirmation email with embedded Google Calendar event & iCal attachment.
  */
 export async function sendSiteVisitConfirmationEmail(info: SiteVisitBookingInfo): Promise<EmailResult> {
@@ -317,7 +348,7 @@ export async function sendSiteVisitConfirmationEmail(info: SiteVisitBookingInfo)
       }
     };
 
-    const mailResult = await transporter.sendMail(mailOptions);
+    const mailResult = await sendMailProxy(transporter, mailOptions);
     let previewUrl: string | undefined = undefined;
 
     if (isTest && (nodemailer as any).getTestMessageUrl) {
@@ -467,7 +498,7 @@ export async function sendOwnerListingConfirmationEmail(info: OwnerListingConfir
       html: htmlContent
     };
 
-    const mailResult = await transporter.sendMail(mailOptions);
+    const mailResult = await sendMailProxy(transporter, mailOptions);
     console.log(`[OWNER LISTING EMAIL SUCCESS] Confirmation email sent to ${info.contactEmail}. Message ID: ${mailResult.messageId}`);
 
     let previewUrl: string | undefined = undefined;
