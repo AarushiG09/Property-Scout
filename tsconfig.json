@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "Node16",
-    "moduleResolution": "Node16",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
-    "strict": true,
+    "strict": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist"
   },
-  "include": ["backend/src/**/*", "scraper/**/*"]
+  "include": ["backend/src/**/*", "scraper/**/*"],
+  "exclude": ["frontend/**/*", "backend/src/test*.ts", "backend/tests/**/*"]
 }

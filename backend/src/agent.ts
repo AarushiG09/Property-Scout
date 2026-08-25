@@ -165,7 +165,7 @@ export async function extractPreferences(transcript: string, current: UserPrefer
 /**
  * Filter database listings based on extracted preferences with graceful fallback.
  */
-export function filterListingsByPreferences(allListings: ListingRow[], prefs: UserPreferences): ListingRow[] {
+export function filterListingsByPreferences(allListings: ParsedListing[], prefs: UserPreferences): ParsedListing[] {
   let filtered = allListings.filter(item => {
     if (prefs.maxRent && item.rent > prefs.maxRent) return false;
     if (prefs.bedrooms && item.bedrooms !== prefs.bedrooms) return false;
@@ -550,9 +550,11 @@ Instructions:
  */
 export async function refineShortlist(
   instruction: string,
-  sessionPrefs: UserPreferences
+  currentShortlist?: any,
+  sessionPrefs?: UserPreferences
 ): Promise<AgentQueryResult> {
-  const updatedPrefs = await extractPreferences(instruction, sessionPrefs);
+  const prefs: UserPreferences = (sessionPrefs || (Array.isArray(currentShortlist) ? {} : currentShortlist) || {}) as UserPreferences;
+  const updatedPrefs = await extractPreferences(instruction, prefs);
 
   const dropMatch = instruction.match(/(?:drop|remove|exclude|filter out)\s*(?:previous|anything|properties)?\s*(?:above|over|more than|>)\s*(\d{2,3})(?:\s*k|\s*thousand)?/i);
   if (dropMatch) {

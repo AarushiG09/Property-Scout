@@ -60,7 +60,12 @@ export const FIXED_BROKERS: Broker[] = [
   { broker_id: 10, name: "Sneha Kapoor", phone: "+91 98450 11010", email: "sneha.kapoor@propertyscout.ai" }
 ];
 
-export type ParsedListing = Omit<ListingRow, "amenities"> & { amenities: string[] };
+export type ParsedListing = Omit<ListingRow, "amenities" | "id" | "created_at"> & {
+  id?: number;
+  created_at?: string;
+  amenities: string[];
+  snapshot?: any;
+};
 
 export function getDatabase(): Database.Database {
   if (!dbInstance) {
