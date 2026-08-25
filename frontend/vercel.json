@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://property-scout-backend.up.railway.app/api/:path*"
+      "destination": "https://property-scout-production-98fe.up.railway.app/api/:path*"
     },
     {
       "source": "/(.*)",
